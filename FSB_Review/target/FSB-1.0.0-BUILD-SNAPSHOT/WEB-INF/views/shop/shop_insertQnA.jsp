@@ -260,10 +260,12 @@
 			<h4 class="pb-2" align="center">상품 문의 작성</h4>
 			<div class="col-8 py-2">
 				<form name="f" action="shop_insertQnA.do" method="post" enctype="multipart/form-data">
-				<input type="hidden" name="prod_num" value="${prod_num}">
 				<input type="hidden" name="mem_num" value="${sessionScope.mem_num}">
 				<table border="0" width="100%" height="80%" align="center">
 					<tr height="50">
+						<c:forEach items="${listProd}" var="dto">
+							<input type="hidden" name="prod_num" value="${dto.prod_num}">
+						</c:forEach>						
 						<th width="20%">문의 종류</th>
 						<td width="80%"><!-- 내가 주문한 상품들 중 선택 가능하도록!!! <<<해야함 -->
 							<select name="sq_type" class="form-select">

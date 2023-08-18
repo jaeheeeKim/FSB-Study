@@ -100,7 +100,7 @@
     		<a id="nav" class="nav-link d-block-flex focus-ring py-3 px-4 text-decoration-none border rounded-2" href="game_sort.do?sort=game_player">인원 순</a>
   		</li>
   		<li class="nav-item">
-    		<a id="nav" class="nav-link d-block-flex focus-ring py-3 px-4 text-decoration-none border rounded-2" href="game_sort.do?sort=game_level">난이도 순</a>
+    		<a id="nav" class="nav-link d-block-flex focus-ring py-3 px-4 text-decoration-none border rounded-2" href="game_sort.do?sort=review_starrating">별점 순</a>
   		</li>
   		<li class="nav-item">
     		<a id="nav" class="nav-link d-block-flex focus-ring py-3 px-4 text-decoration-none border rounded-2" href="game_sort.do?sort=game_likeCount">좋아요 순</a>

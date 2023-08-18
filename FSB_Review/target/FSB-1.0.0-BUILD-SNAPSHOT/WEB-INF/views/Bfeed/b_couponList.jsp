@@ -224,8 +224,8 @@ function deleteC(bc_num,bp_num){
   	</ul>
 	</nav>
 	</div>
-	</div>
 			<div id="bcouponView" class="d-flex flex-column align-items-stretch flex-shrink-0 bg-white" style="width: 400px;"></div>
+	</div>
 	</main>
 </body>
 <%@include file="../user/user_bottom.jsp" %>

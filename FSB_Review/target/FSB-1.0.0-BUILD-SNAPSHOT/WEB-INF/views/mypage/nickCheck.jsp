@@ -2,7 +2,7 @@
     pageEncoding="UTF-8"
     isELIgnored="false"
     %>
-<!-- s닉네임 중복확인.jsp -->
+
 <%
 	request.setCharacterEncoding("UTF-8");
 	Integer result = (Integer) session.getAttribute("result");
@@ -24,6 +24,7 @@
 <script type="text/javascript">
 	function sendCheckValue() {
 		var openJoinfrm = opener.document.f2;
+		
 		if (document.checkIdForm.chResult.value=="N") {
 			alert("다른 아이디를 입력해주세요.");
 			openJoinfrm.id.focus();
@@ -67,12 +68,10 @@
 			<input type="hidden" name="chResult" value="N"/>
 		</c:otherwise>
 		</c:choose>
-	<c:if test="${result==1}">
-		<input type="submit" class="btn btn-outline-primary" onclick="sendCheckValue()" style="width: 5rem;" value="사용하기" disabled/>&nbsp;<input type="button" onclick="window.close()" class="btn btn-outline-primary" style="width: 5rem;" value="취소"/><br>
-		</c:if>
-		<c:if test="${result==0 }">
-<input type="submit" class="btn btn-outline-primary" onclick="sendCheckValue()" style="width: 5rem;" value="사용하기"/>&nbsp;<input type="button" onclick="window.close()" class="btn btn-outline-primary" style="width: 5rem;" value="취소"/><br>
-	</c:if>
+
+		<input type="submit" class="btn btn-outline-primary" onclick="sendCheckValue()" style="width: 5rem;" value="사용하기"/>&nbsp;<input type="button" onclick="window.close()" class="btn btn-outline-primary" style="width: 5rem;" value="취소"/><br>
+		
+
 	</form>
 </div>
 </body>

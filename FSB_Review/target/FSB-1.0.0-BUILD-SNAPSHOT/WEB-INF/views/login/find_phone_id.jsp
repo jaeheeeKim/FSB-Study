@@ -8,7 +8,7 @@
 <script src="resources/js/bootstrap.bundle.min.js"></script>
 
  <link rel="stylesheet" type="text/css" href="resources/css/button.css">
-<!-- 아이디나 비밀번호 찾기시, 핸드폰으로 번호인증! 인증번호 입력후 인증확인 하는 jsp -->
+
     
 <!DOCTYPE html>
 <html>

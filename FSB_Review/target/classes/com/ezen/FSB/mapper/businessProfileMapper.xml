@@ -21,23 +21,15 @@
 	</select>
 	<!-- 비즈니스 프로필 업데이트 하기 -->
 	<update id="updateBP" parameterType="BusinessProfileDTO">
-		update f_business_profile
-		set bp_info=#{bp_info}, bp_location=#{bp_location},
-		    bp_d_location=#{bp_d_location},
-		    bp_store_name=#{bp_store_name},bp_tel= #{bp_tel}
-		where bp_num=#{bp_num}
+		update f_business_profile set bp_info=#{bp_info}, bp_location=#{bp_location}, bp_d_location=#{bp_d_location}, bp_store_name=#{bp_store_name},bp_tel= #{bp_tel} where bp_num=#{bp_num}
 	</update>
 	<!-- 비즈니스 쿠폰 발행 - 만료일 있음 -->
 	<insert id="insertBcoupon1" parameterType="BusinessCouponDTO">
-		insert into f_business_coupon
-		values(#{bp_num},#{mem_num},f_business_coupon_seq.nextval,
-		       #{bc_qty},#{bc_title},#{bc_content}, sysdate, #{bc_duedate})
+		insert into f_business_coupon values(#{bp_num},#{mem_num},f_business_coupon_seq.nextval, #{bc_qty},#{bc_title},#{bc_content}, sysdate, #{bc_duedate})
 	</insert>
 	<!-- 만료일 없음 -->
 	<insert id="insertBcoupon2" parameterType="BusinessCouponDTO">
-		insert into f_business_coupon
-		values(#{bp_num},#{mem_num},f_business_coupon_seq.nextval,
-		       #{bc_qty},#{bc_title},#{bc_content}, sysdate, NULL)
+		insert into f_business_coupon values(#{bp_num},#{mem_num},f_business_coupon_seq.nextval, #{bc_qty},#{bc_title},#{bc_content}, sysdate, NULL)
 	</insert>
 	<!--비즈니스 쿠폰 삭제 -->
 	<delete id="deleteBcoupon" parameterType="int">
@@ -46,8 +38,7 @@
 	<!-- 발급된 쿠폰 리스트 -->
 	<select id="bcouponList"  parameterType ="map" resultType="BusinessCouponUserDTO">
 	 select b.*, m.mem_hp3, m.mem_nickname from 
-	 (select rownum rn, A.* from (select * from f_business_coupon_user
-	                                       where bp_num=#{bp_num} order by bc_duedate asc)A) b
+	 (select rownum rn, A.* from (select * from f_business_coupon_user where bp_num=#{bp_num} order by bc_duedate asc)A) b 
 	 left join f_member m on b.mem_num = m.mem_num 
 	 where rn between #{start} and #{end}
 	</select>
@@ -57,11 +48,7 @@
 	</select>
 	<!-- 멤버 정보 끌어오기 -->
 	<select id="getMember_bc" parameterType="map" resultType="MemberDTO">
-	select m.*,b.bc_using
-	from f_member m
-	    left join f_business_coupon_user b
-	        on m.mem_num = b.mem_num where m.mem_num = #{mem_num}
-	                                   and bc_num = #{bc_num}
+	select m.*,b.bc_using from f_member m left join f_business_coupon_user b on m.mem_num = b.mem_num where m.mem_num = #{mem_num} and bc_num = #{bc_num}
 	</select>
 	<!-- 사장님이 쿠폰 사용처리하기 -->
 	<update id="useBcoupon" parameterType ="map">
@@ -83,10 +70,7 @@
 	</select>
 	<!-- 사용자 쿠폰 받기 -->
 	<insert id="getBCoupon" parameterType="BusinessCouponUserDTO">
-		insert into f_business_coupon_user
-		values(#{bp_num},#{mem_num},#{bc_num},
-		       f_business_coupon_user_seq.nextval,#{bc_title},#{bc_content},
-		       #{bc_duedate,jdbcType=VARCHAR},NULL)
+		insert into f_business_coupon_user values(#{bp_num},#{mem_num},#{bc_num},f_business_coupon_user_seq.nextval,#{bc_title},#{bc_content},#{bc_duedate,jdbcType=VARCHAR},NULL)
 	</insert>
 	<!-- 쿠폰 받은 사용자 유무 체크리스트 -->
 	<select id="listBCUser" parameterType="int" resultType="ShopUserCouponDTO">
@@ -112,13 +96,7 @@
 	</select>
 	<!-- 리뷰 리스트 -->
 	<select id="BPReviewList" parameterType="map" resultType="BusinessReviewDTO">
-	 select b.*, m.mem_nickname
-	 from (select rownum rn, A.*
-	       from (select * from f_bp_review
-	                      where bp_num = #{bp_num}
-	                      order by bpr_regdate desc)A) b
-	     left join f_member m on b.mem_num = m.mem_num
-	 where rn between #{start} and #{end}
+	 select b.*, m.mem_nickname from (select rownum rn, A.* from (select * from f_bp_review where bp_num = #{bp_num} order by bpr_regdate desc)A) b left join f_member m on b.mem_num = m.mem_num where rn between #{start} and #{end}
 	</select>
 	<!-- 별점 평균 trunc(소수점빼주는),avg(평균내주는)-->
 	<select id="b_reviewAvg" parameterType="int" resultType="int">
@@ -126,11 +104,7 @@
 	</select>
 	<!-- 리뷰 작성 -->
 	<insert id="insertBPReview" parameterType="BusinessCouponDTO">
-		insert into f_bp_review
-		values(f_bp_review_seq.nextval,#{bp_num},#{mem_num},
-		       #{bpr_starrating},#{bpr_img1, jdbcType=VARCHAR},
-		       #{bpr_img2, jdbcType=VARCHAR}, #{bpr_img3, jdbcType=VARCHAR},
-		       #{bpr_img4, jdbcType=VARCHAR}, #{bpr_title}, #{bpr_content}, sysdate,0)
+		insert into f_bp_review values(f_bp_review_seq.nextval,#{bp_num},#{mem_num}, #{bpr_starrating},#{bpr_img1, jdbcType=VARCHAR}, #{bpr_img2, jdbcType=VARCHAR}, #{bpr_img3, jdbcType=VARCHAR}, #{bpr_img4, jdbcType=VARCHAR}, #{bpr_title}, #{bpr_content}, sysdate,0)
 	</insert>
 	<!-- 리뷰 작성 후 매장 별점 업데이트 -->
 	<update id="setStarrating" parameterType="map" >
@@ -138,10 +112,7 @@
 	</update>
 	<!-- 리뷰 상세보기 -->
 	<select id="getBreview" resultType="BusinessReviewDTO">
-		select b.*, m.mem_nickname
-		from(select * from f_bp_review
-		              where bpr_num =#{bpr_num}) b
-		    left join f_member m on b.mem_num = m.mem_num
+		select b.*, m.mem_nickname from(select * from f_bp_review where bpr_num =#{bpr_num}) b left join f_member m on b.mem_num = m.mem_num
 	</select>
 	 <!-- 리뷰 삭제(사용자) --> 
 	 <delete id="deleteBreview" parameterType="map" >
@@ -149,14 +120,7 @@
 	</delete>
 	<!-- 리뷰 수정 (사용자) -->
 	<update id="updateBreview" parameterType="map">
-		 update f_bp_review
-		 set bpr_starrating = #{bpr_starrating} ,
-		     bpr_img1=#{bpr_img1, jdbcType=VARCHAR},
-		     bpr_img2=#{bpr_img2, jdbcType=VARCHAR},
-		     bpr_img3=#{bpr_img3, jdbcType=VARCHAR},
-		     bpr_img4=#{bpr_img4, jdbcType=VARCHAR},
-		     bpr_title=#{bpr_title}, bpr_content=#{bpr_content}
-		 where bpr_num = #{bpr_num}
+		 update f_bp_review set bpr_starrating = #{bpr_starrating} , bpr_img1=#{bpr_img1, jdbcType=VARCHAR}, bpr_img2=#{bpr_img2, jdbcType=VARCHAR}, bpr_img3=#{bpr_img3, jdbcType=VARCHAR}, bpr_img4=#{bpr_img4, jdbcType=VARCHAR}, bpr_title=#{bpr_title}, bpr_content=#{bpr_content} where bpr_num = #{bpr_num}
 	</update>
 	<!-- 리뷰 블락 (사장님) -->
 	<update id="blockReview" parameterType="map">

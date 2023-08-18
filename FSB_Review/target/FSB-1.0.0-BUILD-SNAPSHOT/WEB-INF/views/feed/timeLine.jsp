@@ -163,6 +163,7 @@
 		if(!content || content===''){
 			alert("내용을 작성해주세요.");
 		}else{
+			alert(content);
 			updateReplyOK(fr_num, content);
 		}
 	}

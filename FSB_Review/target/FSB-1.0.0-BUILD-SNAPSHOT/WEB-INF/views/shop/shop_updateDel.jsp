@@ -24,7 +24,7 @@
 
 <div class="d-flex justify-content-center">
 	<div class="container px-1 py-4">
-		<h5 class="border-bottom"><b>배송지 수정</b></h5><br>
+		<h5 class="border-bottom"><b>새 배송지 추가</b></h5><br>
 			<form name="f" action="shop_updateDel.do" method="post">
 			<input type="hidden" name="del_num" value="${getDelivery.del_num}">
 				<table class="table" border="1" width="100%" align="center" style="font-size:12pt">

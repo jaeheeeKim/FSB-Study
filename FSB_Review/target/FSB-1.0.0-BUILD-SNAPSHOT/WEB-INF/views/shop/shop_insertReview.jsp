@@ -40,24 +40,7 @@
 	}
 	
 </style>
-<!-- 유효성 검사 추가  -->
-<script>
-function check() {
-	if (f.sr_title.value == ""){
-		alert("리뷰 제목을 입력해주세요!")
-		f.board_title.focus()
-		return false
-	}if (f.sr_content.value == "") {
-		alert("리뷰 내용을 입력해주세요!")
-		f.board_title.focus()
-		return false
-	}
-	if(f)
-		f.action = 'shop_insertReview.do';
-		f.submit();
-		return true
-}
-</script>
+
 <script type="text/javascript">
 	let sorted_files = []; //이미지 배열
 	
@@ -84,12 +67,10 @@ function check() {
 			}
 			submitFormAction();
 		}
-//유효성 검사 추가
 		//submit동작
 		function submitFormAction(){
-			//f.action = 'shop_insertReview.do';
-			//f.submit();
-			check();
+			f.action = 'shop_insertReview.do';
+			f.submit();
 		}
 	}
 	//이미지 Base64로 전환

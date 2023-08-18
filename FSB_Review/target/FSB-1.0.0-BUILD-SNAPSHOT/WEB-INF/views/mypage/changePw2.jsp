@@ -5,7 +5,7 @@
 	<link href="resources/css/bootstrap.min.css" rel="stylesheet">
 <body>
  
-<!-- 비밀번호 재설정.jsp -->
+
 <div align="center">
 <br>
 <h2>비밀번호 변경</h2>

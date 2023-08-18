@@ -36,29 +36,22 @@
    </style>
    
    		<td width="90%" style="overflow: scroll; width: 900px; height: 400px;">
-   		<div class="col-9 py-2 justify-content-center">
     		<table width="100%" class="table table-striped" >
     			<caption><font size="5" color="#000000"><b>전체 주문 목록</b></font></caption>
         		<tr align="center" valign="top">
-        			<th><font size="4">주문 일자</font></th>
-        			<th><font size="4">주문 번호</font></th>
-        			<th><font size="4">주문 상품</font></th>
-        			<th><font size="4">총 주문 금액</font></th>
-        			<th><font size="4">결제 방식</font></th>
-        			<th><font size="4">주문 처리 상태</font></th>
-        			<th><font size="4">취소/환불</font></th>
+        			<th width="%"><font size="4">주문 일자</font></th>
+        			<th width="%"><font size="4">주문 번호</font></th>
+        			<th width="%"><font size="4">주문 상품</font></th>
+        			<th width="%"><font size="4">총 주문 금액</font></th>
+        			<th width="%"><font size="4">결제 방식</font></th>
+        			<th width="%"><font size="4">주문 처리 상태</font></th>
+        			<th width="%"><font size="4">취소/환불</font></th>
         		</tr>
-        		<c:if test="${empty listOrder}">
-        			<tr>
-        				<td colspan="7" align="center">주문 내역이 없습니다.</td>
-        			</tr>
-        		</c:if>
-        		<c:if test="${not empty listOrder}">
         		<c:forEach var="dto" items="${listOrder}">
         		<tr align="center" valign="middle">
         			<td>${dto.order_date}</td>
-        			<td>${dto.order_date}${dto.order_num}</td>
-        			<td align="left"><a href="shop_orderDetail.do?order_num=${dto.order_num}&mem_num=${mem_num}">
+        			<td><a href="#">${dto.order_date}${dto.order_num}</a></td>
+        			<td align="left"><a href="shop_orderDetail.do?order_num=${dto.order_num}">
         				<img src="resources/img/${dto.prod_img}" width="100" height="100">
         				[${dto.prod_company}] ${dto.prod_name} <c:if test="${(dto.prod_count-1) > 0}">외 ${dto.prod_count-1}건</c:if>
         			</a></td>
@@ -88,9 +81,7 @@
         			</td>
 				</tr>
 				</c:forEach>
-				</c:if>
 			</table>
-			</div>
 		</td>
 	</tr>
 </table>

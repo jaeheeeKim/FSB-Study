@@ -2,8 +2,6 @@
     pageEncoding="UTF-8"
     isELIgnored="false"
     %>
- 
- <!-- 아이디 중복체크결과.jsp -->   
 
 <%
 	request.setCharacterEncoding("UTF-8");

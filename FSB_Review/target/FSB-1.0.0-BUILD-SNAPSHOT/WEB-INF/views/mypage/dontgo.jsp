@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<!--  회원 탈퇴 선택 제이에스피.jsp -->
 <%@include file="../user/user_top.jsp" %>
 <link rel="stylesheet" type="text/css" href="resources/css/file.css">
 <script type="text/javascript">

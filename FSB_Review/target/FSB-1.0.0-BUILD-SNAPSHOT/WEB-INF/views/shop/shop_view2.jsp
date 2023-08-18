@@ -32,10 +32,48 @@
             <b> ${reviewAvg} / 5</b>
             </h5>
          </div>
+         <div class="col-4 bg-white border-bottom py-3 pb-2">
+            <font size="4.5"><b>포토리뷰</b></font>
+         </div>
+         <div class="col-5 bg-white border-bottom py-3 pb-2" align="right">
+            <a href="shop_view2_photo.do"><button class="btn btn-outline-dark btn-sm" type="button">전체보기</button></a>            
+         </div>
+         <div class="col-9 py-3 bg-white border-bottom">
+         <table> <!-- 포토리뷰 4장만 보기(table) -->
+          <tr>
+			<c:if test="${empty getViewReview}">
+				<h6>등록된 포토리뷰가 없습니다.</h6>
+			</c:if>
+			<c:if test="${not empty getViewReview}">	         
+         	<c:forEach var="dto" items="${getViewReview}">
+			<td>
+            	<c:if test="${dto.sr_img1 eq null}">
+            		 
+            	</c:if>
+            </td>
+            	<c:if test="${dto.sr_img1 ne null}">
+            <td height="230">
+               	 <a href="#"><img class="imgProviewCrop round" src="resources/img/${dto.sr_img1}" width="222" height="222"></a>
+            </td>
+				</c:if>
+            </c:forEach>
+			</c:if>
+          </tr>
+         </table>
+         </div>
       </div>
       <div class="row justify-content-center">
          <div class="col-9 bg-white border-bottom py-3 pb-2">
             <font size="4.5"><b>리뷰 (${count})</b></font> 
+            
+            
+            <c:if test="${isLogin=='true'}">
+            <a href="shop_insertReview.do">쓰기</a>
+            </c:if>
+            <c:if test="${isLogin=='false'}">
+            </c:if>
+            
+            
          </div>
       </div>
       

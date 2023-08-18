@@ -9,7 +9,6 @@
 
  <link rel="stylesheet" type="text/css" href="resources/css/button.css">
 
-<!-- 비밀번호 찾기 시 새로운 비밀번호 설정 .jsp -->
     
 <!DOCTYPE html>
 <html>

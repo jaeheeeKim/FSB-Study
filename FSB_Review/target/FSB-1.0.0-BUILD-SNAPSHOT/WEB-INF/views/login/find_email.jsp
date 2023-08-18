@@ -9,7 +9,6 @@
 
  <link rel="stylesheet" type="text/css" href="resources/css/button.css">
 
-<!-- 비밀번호 찾기시, 이메일 인증 번호 보내기 누른이후  인증번호 입력하는 칸.jsp -->
     
 <!DOCTYPE html>
 <html>

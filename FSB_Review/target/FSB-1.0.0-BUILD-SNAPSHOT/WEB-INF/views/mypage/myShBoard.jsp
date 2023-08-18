@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<!--내가쓴글목록 중고게시판 목록 -->
 <%@include file="../user/user_top.jsp" %>
 <link rel="stylesheet" type="text/css" href="resources/css/file.css">
 <script type="text/javascript">
@@ -25,7 +24,7 @@
 
 
 <div style="width: 600px; margin: 0 auto;">
-	<b>중 고 게 시 판</b>
+	<b>자 유 게 시 판</b>
 	<br>
 	<br>
 	<table class=" p-3 mx-auto p-2">
@@ -88,7 +87,7 @@
 				</c:if>
 				
 				<c:if test="${not empty sessionScope.mbId}">
-				<a href="content_board_sh.do?board_num=${dto.board_num}&pageNum=0&mode=" class="link-primary text-decoration-none link-opacity-50-hover">${dto.board_title}</a> 
+				<a href="content_board.do?board_num=${dto.board_num}&pageNum=0&mode=" class="link-primary text-decoration-none link-opacity-50-hover">${dto.board_title}</a> 
 				</c:if>
 				
 				<c:if test="${dto.board_replycount ne 0}">

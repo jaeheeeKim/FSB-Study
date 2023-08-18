@@ -7,27 +7,6 @@
 	<!-- 보드게임 사이드바 -->
 	<%@include file="game_sidebar.jsp" %>
 
-<script type="text/javascript">
-	function check() {
-		if (f.game_name.value == "") {
-			alert("게임 이름을 입력해주세요!")
-			f.game_name.focus()
-			return false
-		}
-		if (f.game_playTime.value == "") {
-			alert("플레이시간을 입력해주세요")
-			f.game_playTime.focus()
-			return false
-		}
-		if (f.game_content.value == "") {
-			alert("게임 설명을 입력해주세요")
-			f.game_content.focus()
-			return false
-		}
-		return true		
-	}
-</script>
-
 		<!-- 내용 // 보드게임 수정 -->
 		<div class="container text-center overflow-auto">
 		<p>
@@ -36,7 +15,7 @@
 		    	<div class="col">보드게임 수정</div>
 		    	<p>
 		    	<div class="col">
-					<form name="f" action="admin_game_update.do" method="post" enctype="multipart/form-data" onsubmit="return check()">
+					<form name="f" action="admin_game_update.do" method="post" enctype="multipart/form-data">
 					<table border="0" width="80%" height="80%" align="center">
 						<tr>
 							<th width="30%" align="center">게임 이름</th>

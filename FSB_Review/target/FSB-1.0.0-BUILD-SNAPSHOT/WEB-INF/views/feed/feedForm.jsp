@@ -129,7 +129,9 @@
 	}
 	//게임 선택
 	function selectGameOK(gameNum, gameName){
+		alert("메소드 실행");
 		f.game_num.value = gameNum;
+		alert("메소드 실행");
 		$("#gameText").html(gameName);
 		$("#gameZone").show();
 	}

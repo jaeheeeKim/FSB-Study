@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 
-<!--  인증확인 .jsp -->
+
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> 
 <script src="resources/js/jquery-3.7.0.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1">

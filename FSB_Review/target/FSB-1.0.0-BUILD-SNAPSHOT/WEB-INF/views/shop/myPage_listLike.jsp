@@ -5,17 +5,25 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <script type="text/javascript">
-	function checkDel(prod_num){
+	function checkDel(sl_num){
 		var isDel = window.confirm("정말로 삭제하겠습니까?");
 		if (isDel){
 			//위의 dto.cart_num과 dto.prod_num을 생성된 value에 넣어준 후 보낸거임!!!
-			document.deleteOne.prod_num.value = prod_num;
+			document.deleteOne.sl_num.value = sl_num;
 			document.deleteOne.submit();
 		}
 	}
 	
+	function goCart(){
+		f.action="shop_insertCart.do";//장바구니 상품 [주문결제]
+		f.submit();
+	}
 </script>
 <td>
+<!-- ★★★ 센터로 보내는 div class ★★★ -->
+<div class="d-flex justify-content-center">
+	<div class="container px-5 py-3" id="featured-insertReview">
+		<div class="row justify-content-center">
 			<div class="col-9 py-2 justify-content-center">
 			<form name="f" method="post">
 			<h4 class="pb-2" align="left">
@@ -48,7 +56,8 @@
 						<td>${df.format(dto.prod_price)}원</td>
 						<td><font color="blue">${df.format(dto.prod_point)}P</font></td>
 						<td> 
-							<button class="btn btn-outline-dark" type="button" onclick="javascript:checkDel('${dto.prod_num}')">삭제하기</button>
+							<button class="btn btn-outline-dark" type="button" onclick="javascript:goCart()">장바구니</button>
+							<button class="btn btn-outline-dark" type="button" onclick="javascript:checkDel('${dto.sl_num}')">삭제하기</button>
 						</td>
 					</tr>
 				</c:forEach>
@@ -65,7 +74,7 @@
      </td>
    </tr>
 </table>
-<form name="deleteOne" action="shop_deleteLike.do?mode=listLike" method="post">
-	<input type="hidden" name="prod_num">
+<form name="deleteOne" action="shop_deleteLike.do" method="post">
+	<input type="hidden" name="sl_num">
 </form>
 <%@include file="shop_bottom.jsp" %>

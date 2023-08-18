@@ -79,14 +79,17 @@
 		$.ajax({
 			type: "post",
 			url: "shop_finishOrder.do",
+			//data: $("#f1").serialize()+"@@"+$("#f2").serialize()+"@@"+$("#f3").serialize()+"@@"+
+			//$("#f4").serialize()+"@@"+$("#f5").serialize()+"@@"+$("#f6").serialize()+"@@"+$("#f7").serialize()+"@@",
 			data: data,
 			dataType:'json',			
+			//#f1,#f2,#f3,#f4,#f5,#f6,#f7
 			sucess: function(data){
 				alert("시스템 에러")
 			},
 			error: function(data){
-				alert("결제 완료 되었습니다. 감사합니다 🐹");
-				let url = 'user_shop_myPage.do';
+				alert("전송 성공");
+				let url = 'shop_main.do';
 				location.replace(url);
 			}
 		});
@@ -160,7 +163,7 @@
 						</td>
 						<td>
 							<c:if test="${getProd.prod_discount eq 0}">
-								${sessionScope.df.format(getProd.prod_price * cart_qty)}원
+								${sessionScope.df.format(getProd.prod_price)}원
 							</c:if>
 							<c:if test="${getProd.prod_discount ne 0}">
 								${sessionScope.df.format(getProd.prod_price*(1-getProd.prod_discount/100))}원
@@ -177,12 +180,7 @@
 				</form>		
 				<form name="f2" id="f2" method="post">
 				<input type="hidden" name="mode" value="view">
-				<c:if test="${getProd.prod_price * cart_qty >= 50000}">
 				<input type="hidden" name="view_order_price" value="${getProd.prod_price * cart_qty}">
-				</c:if>
-				<c:if test="${getProd.prod_price * cart_qty < 50000}">
-				<input type="hidden" name="view_order_price" value="${(getProd.prod_price * cart_qty) + getProd.prod_delchar}">
-				</c:if>				
 				<input type="hidden" name="view_point_type_save" value="+">
 				<input type="hidden" name="view_point_content_save" value="적립">
 				<input type="hidden" name="view_savePoint" value="${getProd.prod_point * cart_qty}">
@@ -279,17 +277,12 @@
  				<input type="hidden" name="mode" value="cart">				
 				<input type="hidden" name="point_type_save" value="+">
 				<input type="hidden" name="point_content_save" value="적립">
-				<c:if test="${cartTotalPrice >= 50000}">
-				<input type="hidden" name="order_price" value="${cartTotalPrice}">
-				</c:if>
-				<c:if test="${cartTotalPrice < 50000}">
-				<input type="hidden" name="order_price" value="${cartTotalPrice + cartTotalDelchar}">
-				</c:if>
 				<table width="40%" align="right">
 					<tr align="right">
 						<td align="right">장바구니 총 금액</td>
 						<td align="right">
 							<font color="red">${sessionScope.df.format(cartTotalPrice)}</font>원
+							<input type="hidden" name="order_price" value="${cartTotalPrice}">
 						</td>
 					</tr>
 					<tr>
@@ -317,7 +310,7 @@
 					</thead>
 					<tr valign="middle">
 						<td width="47%">&nbsp 쿠폰</td>			
-						<td width="35%" align="right" id="result">0</td>
+						<td width="35%" align="right" id="getCouponDiscount">0</td>
 						<td width="3%" align="right"><b>원</b></td>
 						<td width="15%" align="right">
 							<c:if test="${empty myCoupon}">
@@ -336,47 +329,33 @@
 									<b>보유 쿠폰 (${myCouponCount})</b><hr>
 									<c:forEach var="clist" items="${myCoupon}">
 									<input type="hidden" name="usc_num" value="${clist.usc_num}">
-										<c:if test="${mode == 'view'}">
 										<c:if test="${clist.sc_type eq '%'}"><!-- 할인율 쿠폰의 경우 -->
 											<label>
-											<input class="radioBtn" type="radio" name="order_coupon" id="order_coupon" value="${getProd.prod_price * (clist.sc_discount)*0.01}">
+											<input type="radio" name="order_coupon" id="order_coupon1" value="${sessionScope.df.format(cartTotalPrice * (clist.sc_discount)*0.01)}">
 											<img src="resources/img/coupon_3.png" class="img-fluid rounded-start" alt="할인율쿠폰" width="30px" height="30px">											
-											<b>${getProd.prod_price * (clist.sc_discount)*0.01}원</b> 
+											<b>${sessionScope.df.format(cartTotalPrice * clist.sc_discount/100)}원</b> 
 											${clist.sc_discount}% ${clist.sc_name} ${sessionScope.df.format(clist.sc_min)}원 이상 구매시 (최대 ${sessionScope.df.format(clist.sc_limit)}원 할인)
 											<c:if test="${not empty clist.usc_duedate}"><font color="#4D4D4D">${clist.usc_duedate}까지</font></c:if>
 											</label>
-										</c:if>
-										</c:if>
-										<c:if test="${mode == 'cart'}">
-										<c:if test="${clist.sc_type eq '%'}"><!-- 할인율 쿠폰의 경우 -->
-											<label>
-											<input class="radioBtn" type="radio" name="order_coupon" id="order_coupon" value="${cartTotalPrice * (clist.sc_discount)*0.01}">
-											<img src="resources/img/coupon_3.png" class="img-fluid rounded-start" alt="할인율쿠폰" width="30px" height="30px">											
-											<b>${cartTotalPrice * (clist.sc_discount)*0.01}원</b> 
-											${clist.sc_discount}% ${clist.sc_name} ${sessionScope.df.format(clist.sc_min)}원 이상 구매시 (최대 ${sessionScope.df.format(clist.sc_limit)}원 할인)
-											<c:if test="${not empty clist.usc_duedate}"><font color="#4D4D4D">${clist.usc_duedate}까지</font></c:if>
-											</label>
-										</c:if>
 										</c:if>
 										<c:if test="${clist.sc_type eq '-'}"><!-- 금액 쿠폰의 경우 -->
-											<label>												
-											<input class="radioBtn" type="radio" name="order_coupon" id="order_coupon" value="${clist.sc_discount}">
+											<label for="coupon" valign="middle">												
+											<input type="radio" name="order_coupon" id="order_coupon2" value="${clist.sc_discount}">
 											<img src="resources/img/coupon_2.png" class="img-fluid rounded-start" alt="금액쿠폰" width="40px" height="40px">
 											<b>${clist.sc_discount}원</b> ${clist.sc_name} 
-											<c:if test="${not empty clist.usc_duedate}"><font color="#4D4D4D">${clist.usc_duedate}까지</font></c:if>
-											</label>
+											<c:if test="${not empty clist.usc_duedate}"><font color="#4D4D4D">${clist.usc_duedate}까지</font></c:if>																								</label>
 										</c:if>
 										<c:if test="${clist.sc_type eq 'delchar'}"><!-- 배송비 쿠폰의 경우 -->
-											<label>
-											<input class="radioBtn" type="radio" name="order_coupon" id="order_coupon" value="${clist.sc_discount}">
+											<label for="coupon">
+											<input type="radio" name="order_coupon" id="order_coupon3" value="${getProd.prod_price * clist.sc_discount/100}">
 											<img src="resources/img/coupon_1.png" class="img-fluid rounded-start" alt="배송비쿠폰" width="40px" height="40px">
-											<b>${clist.sc_discount}원</b> ${clist.sc_name}
+											<b>${clist.sc_discount}원</b> ${clist.sc_name} 
 											<c:if test="${not empty clist.usc_duedate}"><font color="#4D4D4D">${clist.usc_duedate}까지</font></c:if>																							
 											</label>
 										</c:if>
 									<script>
 									// [쿠폰 적용] 버튼
-/* 									$(document).ready(function(){
+									$(document).ready(function(){
 										$("#getCheckCoupon").on("click", function(){
 											//버튼 누르면 html에 출력
 											if(document.getElementById("order_coupon1")){
@@ -389,15 +368,7 @@
 											}
 											//숨기기위함 const row = document.getElementById('myCoupon');
 										});
-									}); */
-									$(document).ready(function(){
-										$("#getCheckCoupon").on("click", function(){
-											//버튼 누르면 html에 출력
-											var discount = document.querySelector('input[name="order_coupon"]:checked').value;
-											$("#result").html(discount);
-											$("#coupontDiscount").html(discount);
-										});
-									});									
+									});
 											
 									</script>										
 									</c:forEach>
@@ -422,7 +393,8 @@
 								$("#pointDiscount").html(totalPoint);
 								$("#zero").html(0);
 								//value값 바꿔주기
-								document.querySelector("#totalPoint").value = totalPoint;
+								var t = totalPoint.toLocaleString();
+								document.querySelector("#totalPoint").value = t;
 							});
 						});
 						function pointDiscount(){
@@ -432,12 +404,12 @@
 						
 					</script>
 					<tr valign="middle" height="50">
-						<td align="right" colspan="2">보유 포인트</td>
-						<td align="right" id="zero">
+						<td align="right" width="10%">보유 포인트</td>
+						<td align="right" width="20%" colspan="2" id="zero">
 							<c:if test="${not empty getTotalPoint}"> ${sessionScope.df.format(getTotalPoint)}</c:if>
 							<c:if test="${empty getTotalPoint}">0</c:if>
 						</td>
-						<td align="right">점</td>
+						<td align="right" width="15%">점</td>
 					</tr>
 				</table>
 				</form>
@@ -662,6 +634,7 @@
 				</table>
 				</c:if>
  				<c:if test="${mode == 'cart'}">
+				<input type="hidden" name="order_receiptprice" value="${cartTotalPrice + cartTotalDelchar}">
 				<table width="45%" align="center" style="font-size:120%">
 					
 					<tr align="right">
@@ -706,11 +679,16 @@
 			<div class="col-9 py-3" align="center">
 				<input class="checkbox" type="checkbox" name="동의여부" id="checkbox" checked>
 				<b>(필수)</b> 주문 내용 확인 및 결제 동의
-				<br><br>
+				<br>
 				<form name="f8" id="f8" method="post">
-				<h4><input type="radio" name="order_payment" value="무통장결제">무통장 결제 <input type="radio" name="order_payment" value="카드결제">카드 결제</h4>
+				<h4><input type="radio" name="order_payment" value="무통장결제">무통장 결제</h4>
+				<h4><input type="radio" name="order_payment" value="카드결제">카드 결제</h4>
 				</form>
 				<br>
+				
+				<a href="test.do">결제 테스트</a>
+				
+				<br><br>
 				<button class="btn btn-outline-dark" type="submit" onclick="finishOrder()">결제하기</button>
 				<button class="btn btn-outline-dark" type="button" onclick="history.back()">돌아가기</button>
 			</div>
@@ -718,5 +696,31 @@
 		</div>
 	</div>
 </div>
+
+<!-- 바로구매 : insertOrder 위해서 보냄 -->
+<!-- <input type="hidden" name="cart_num" value="외래키 있으면 0으로 못하니까 테이블에서 cart_num지우고  join만 해주기로함"/> -->
+<input type="hidden" name="order_price" value="${getProd.prod_price * cart_qty}">
+
+<!-- 바로구매 상세 : insertOrderDetail 위해서 보냄 -->
+<input type="hidden" name="game_name" value="${getProd.game_name}">
+<input type="hidden" name="cart_qty" value="${cart_qty}">
+
+<!-- 장바구니구매 -->
+<!-- pointOrder(적립과 동시에 사용) 위해서 보냄 -->
+<input type="hidden" name="point_type_save" value="'+'">
+<input type="hidden" name="point_content_save" value="'적립'">
+<input type="hidden" name="point_amount_save" value="위에서 생성된${cartTotalPoint}">
+<input type="hidden" name="point_total_save" value="${getTotalPoint + cartTotalPoint}">
+
+<input type="hidden" name="point_type_use" value="'-'">
+<input type="hidden" name="point_content_use" value="'사용'">
+<input type="hidden" name="point_amount_use" value="위에서 input타입으로 보냄">
+<input type="hidden" name="point_total_use" value="${getTotalPoint - order_point}">
+<!-- deleteUserCoupon 위해서 보냄 : 위에서 보냄 -->
+<!-- insertDel 위해서 보냄 : 위에서 보냄-->
+<!-- insertOrder 위해서 보냄 -->
+<input type="hidden" name="cart_num" value="위에서 hidden으로 보냄">
+<input type="hidden" name="order_price" value="최종 결제 금액 전! 위에서 hidden으로 보냄">
+<!-- insertOrderDetail 위해서 보냄 : 위에서 보냄 -->
 
 <%@include file="shop_bottom.jsp" %>

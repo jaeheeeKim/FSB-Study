@@ -82,7 +82,7 @@ function  checkDel(){
 	    },
 	    error: function(err) {
 	    	//alert("리뷰 이미지, 글 삭제 성공");
-	    alert("게시글을 삭제합니다");
+	    	alert("실패")
 	    	console.log(err)
 	    	location.reload();
 	    	/* alert("ajax 처리 중 에러 발생");

@@ -4,8 +4,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> 
   <link href="resources/css/bootstrap.min.css" rel="stylesheet">
 	<link href="resources/css/bootstrap.min.css" rel="stylesheet">
-	
-<!-- 뱃지 설정 .jsp  -->
 <html>
 <head>
 <meta charset="UTF-8">

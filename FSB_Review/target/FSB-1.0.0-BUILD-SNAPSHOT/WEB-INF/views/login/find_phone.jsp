@@ -9,7 +9,7 @@
 
  <link rel="stylesheet" type="text/css" href="resources/css/button.css">
 
- <!-- 핸드폰으로 찾기시, 번호 입력 + 인증요청 누르는.jsp -->
+    
 <!DOCTYPE html>
 <html>
 <head>

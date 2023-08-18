@@ -3,7 +3,6 @@
 <!DOCTYPE html>
 <%@include file="../user/user_top.jsp" %>
 <link rel="stylesheet" type="text/css" href="resources/css/file.css">
-<!-- 내가쓴글중 자유게시.jsp -->
 <script type="text/javascript">
 
 	function changePw(mem_num){ // 비밀번호 변경폼

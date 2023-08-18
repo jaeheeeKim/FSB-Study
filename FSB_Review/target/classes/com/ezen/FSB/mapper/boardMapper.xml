@@ -23,52 +23,25 @@
 <!-- 게시판 목록 -->	
 	<!--자유게시판 리스트  -->
 	<select id="listBoard" parameterType="map" resultType="boardDTO">
-		  select b.*, m.mem_nickname,m.mem_img,f.bf_num
-		  from (select rownum rn, A.*
-		    	from (select * from f_board
-		    	               where board_anony_check=0
-		    	               order by board_re_group desc, board_re_step asc)A) b
-		      left join f_member m on b.mem_num = m.mem_num
-		      left join f_board_files f on b.board_num = f.board_num
-		  where rn between #{start} and #{end} and not board_content ='-'
+		  select b.*, m.mem_nickname,m.mem_img,f.bf_num from (select rownum rn, A.* from (select * from f_board where board_anony_check=0 order by board_re_group desc, board_re_step asc)A) b left join f_member m on b.mem_num = m.mem_num left join f_board_files f on b.board_num = f.board_num where rn between #{start} and #{end}
 	</select>
 	<!-- 익명게시판 리스트 -->
 	<select id="listBoard_anony" parameterType="map" resultType="boardDTO">
-		 select b.*, m.mem_nickname,m.mem_img,f.bf_num
-		 from (select rownum rn, A.*
-		       from (select * from f_board
-		                      where board_anony_check=1
-		                      order by board_re_group desc, board_re_step asc)A) b
-		     left join f_member m on b.mem_num = m.mem_num
-		     left join f_board_files f on b.board_num = f.board_num
-		 where rn between #{start} and #{end} and not board_content ='-'
+		 select b.*, m.mem_nickname,m.mem_img,f.bf_num from (select rownum rn, A.* from (select * from f_board where board_anony_check=1 order by board_re_group desc, board_re_step asc)A) b left join f_member m on b.mem_num = m.mem_num left join f_board_files f on b.board_num = f.board_num where rn between #{start} and #{end}
 	</select>
 	<!--자유게시글 검색 -->
 	<select id="findFree" parameterType="map" resultType="BoardDTO">
-  		select b.*, m.mem_nickname,m.mem_img
-  		from (select rownum rn, A.*
-  		      from (select * from f_board
-  		                     where board_anony_check=0
-  		                     order by board_re_group desc, board_re_step asc)A) b
-  		    left join f_member m on b.mem_num = m.mem_num
-  		where ${search} like '%'||#{searchString}||'%'
-  		  and not board_content ='-' and rn between #{start} and #{end}
+  		select b.*, m.mem_nickname,m.mem_img from (select rownum rn, A.* from (select * from f_board where board_anony_check=0 order by board_re_group desc, board_re_step asc)A) b left join f_member m on b.mem_num = m.mem_num where ${search} like '%'||#{searchString}||'%' and not board_content ='-' and rn between #{start} and #{end}	
  	</select>
  	
  	<!--익명게시글 검색 -->
 	<select id="findAnony" parameterType="map" resultType="BoardDTO">
-  		select * from f_board
-  		         where board_anony_check=1
-  		           and ${search} like '%'||#{searchString}||'%'
-  		           and not board_content = '-'
+  		select * from f_board where board_anony_check=1 and ${search} like '%'||#{searchString}||'%' and not board_content = '-'
  	</select>
  	
  	<!--검색용 페이지 수 자유-->
  	<select id="getCountFind_Free" parameterType="map" resultType="int">
- 	 select count(*)
- 	 from f_board
- 	 where board_anony_check=0
- 	   and ${search} like '%'||#{searchString}||'%'
+ 	 select count(*) from f_board where board_anony_check=0 and ${search} like '%'||#{searchString}||'%'
  	</select>
  	
  	<!-- 검색용 페이지 수 익명 -->
@@ -77,20 +50,13 @@
  	</select>
  	<!-- 자유게시판 닉네임 검색용 쿼리 -->
  	<select id="getCountFind_nick" parameterType="map" resultType="int">
-		 select count(m.mem_nickname)
-		 from f_board b
-		     left join f_member m on b.mem_num = m.mem_num
-		 where m.mem_nickname like '%'||#{searchString}||'%'
-		   and b.board_anony_check=0
+		 select count(m.mem_nickname) from f_board b left join f_member m on b.mem_num = m.mem_num where m.mem_nickname like '%'||#{searchString}||'%' and b.board_anony_check=0
  	</select>
 
 <!-- 자유,익명 게시글 상세 -->	
 	<!-- 자유게시판 ,익명게시판 상세보기 -->
 	<select id="getBoard" parameterType="int" resultType="BoardDTO">
-		select b.*,m.mem_nickname,m.mem_img
-		from(select * from f_board
-		              where board_num =#{board_num}) b
-		    inner join f_member m on b.mem_num = m.mem_num
+		select b.*,m.mem_nickname,m.mem_img from(select * from f_board where board_num =#{board_num}) b inner join f_member m on b.mem_num = m.mem_num
 	</select>
 	<!--자유게시판 ,익명게시판  조회수 -->
 	<update id="plusReadcount" parameterType="int">
@@ -98,12 +64,7 @@
 	</update>
 	<!-- 자유게시판 익명게시판 글쓰기  -->
 	<insert id="insertBoard" parameterType="BoardDTO">
-		insert into f_board
-		values(f_board_seq.nextval,#{board_title},sysdate,
-		       #{mem_num},#{board_content},#{board_ip},
-		       #{board_img1},#{board_img2},#{board_img3},#{board_img4},
-		       #{board_re_level},#{board_re_step},#{board_re_group},
-		       #{board_anony_check},0,0,0)
+		insert into f_board values(f_board_seq.nextval,#{board_title},sysdate,#{mem_num},#{board_content},#{board_ip},#{board_img1},#{board_img2},#{board_img3},#{board_img4},#{board_re_level},#{board_re_step},#{board_re_group},#{board_anony_check},0,0,0)
 	</insert>
 	<!-- 자유게시판 익명게시판 글삭제 -->
 	<update id="deleteBoard" parameterType="map">
@@ -115,14 +76,7 @@
 	</delete>
 	<!-- 자유게시판 익명게시판 글수정 -->
 	<update id="updateBoard" parameterType="BoardDTO">
-		update f_board
-		set board_title=#{board_title},
-		    board_content=#{board_content},
-		    board_img1=#{board_img1,jdbcType=VARCHAR},
-		    board_img2=#{board_img2,jdbcType=VARCHAR},
-		    board_img3=#{board_img3,jdbcType=VARCHAR},
-		    board_img4=#{board_img4,jdbcType=VARCHAR}
-		where board_num=#{board_num}
+		update f_board set board_title=#{board_title}, board_content=#{board_content}, board_img1=#{board_img1,jdbcType=VARCHAR},board_img2=#{board_img2,jdbcType=VARCHAR},board_img3=#{board_img3,jdbcType=VARCHAR},board_img4=#{board_img4,jdbcType=VARCHAR} where board_num=#{board_num}
 	</update>
 	<!-- 자유게시판 글목록 개수 -->
 	<select id="getCountBoard" resultType="int">
@@ -144,13 +98,7 @@
 <!-- 자유, 익명게시판 댓글 -->	
  	<!-- 자유, 익명 댓글  리스트 -->
 	<select id="listReply" parameterType="map" resultType="Board_replyDTO">
-	 select b.*, m.mem_nickname, m.mem_img
-	 from (select rownum rn, A.*
-	       from (select * from f_board_reply
-	                      where board_num = #{board_num}
-	                      order by br_re_group desc, br_re_step asc)A) b
-	     left join f_member m on b.mem_num = m.mem_num
-	 where rn between #{start} and #{end}
+	 select b.*, m.mem_nickname, m.mem_img from (select rownum rn, A.* from (select * from f_board_reply where board_num = #{board_num} order by br_re_group desc, br_re_step asc)A) b left join f_member m on b.mem_num = m.mem_num where rn between #{start} and #{end}
 	</select>
 	
    <!-- 댓글 수 -->
@@ -159,39 +107,24 @@
 	</select>
 	<!-- 댓글 많은 수 -->
 	<select id="replylist" resultType="BoardDTO">
-		select * from f_board
-		         where board_anony_check = 0
-		         not board_content='-'
-		         order by board_replycount desc
+		select * from f_board where board_anony_check = 0 and not board_content='-' order by board_replycount desc 
 	</select>
 	<!-- 조회수 높은 순  -->
 	<select id="readlist" resultType="BoardDTO">
-		select * from f_board
-		         where board_anony_check = 0
-		           and not board_content='-'
-		         order by board_readcount desc
+		select * from f_board where board_anony_check = 0 and not board_content='-' order by board_readcount desc 
 	</select>
 	
 	<!-- 댓글 많은 수 -->
 	<select id="replylist_a" resultType="BoardDTO">
-		select * from f_board
-		         where board_anony_check = 1
-		           and not board_content='-'
-		         order by board_replycount desc
+		select * from f_board where board_anony_check = 1 and not board_content='-' order by board_replycount desc 
 	</select>
 	<!-- 조회수 높은 순  -->
 	<select id="readlist_a" resultType="BoardDTO">
-		select * from f_board
-		         where board_anony_check = 1
-		           and not board_content='-'
-		         order by board_readcount desc
+		select * from f_board  where board_anony_check = 1  and not board_content='-' order by board_readcount desc
 	</select>
 	<!-- 자유 익명 댓글 가져오기 -->
 	<select id="getReply" parameterType="int" resultType="Board_ReplyDTO">
-		select b.*,m.mem_nickname,m.mem_img
-		from(select * from f_board_reply
-		     where br_num =#{br_num}) b
-		    inner join f_member m on b.mem_num = m.mem_num
+		select b.*,m.mem_nickname,m.mem_img from(select * from f_board_reply where br_num =#{br_num}) b inner join f_member m on b.mem_num = m.mem_num
 	</select>
 	
 	<!--메인 리스트에 댓글 수 나타내기 위해 보드 리스트에 추가 -->
@@ -200,10 +133,7 @@
 	</update>
 	<!--자유, 익명 댓글 입력  -->
 	<insert id="insertReply" parameterType="Board_replyDTO">
-		insert into f_board_reply
-		values(#{mem_num},#{board_num},f_board_reply_seq.nextval,
-		       #{br_content},sysdate,
-		       #{br_re_level},#{br_re_group},#{br_re_step},0)
+		insert into f_board_reply values(#{mem_num},#{board_num},f_board_reply_seq.nextval,#{br_content},sysdate,#{br_re_level},#{br_re_group},#{br_re_step},0)
 	</insert>
 	<!-- 자유, 익명 댓글 수정 -->
 	<update id="updateReply" parameterType="Board_replyDTO">
@@ -226,13 +156,7 @@
 <!-- 중고게시판 댓글 --> 	
 	<!-- 중고게시판 댓글 리스트  -->
 	<select id="listReply_sh" parameterType="map" resultType="SH_board_replyDTO">
-	 select b.*, m.mem_nickname, m.mem_img
-	 from (select rownum rn, A.*
-	       from (select * from f_sh_board_reply
-	                      where board_num = #{board_num}
-	                      order by br_re_group desc, br_re_step asc)A) b
-	     left join f_member m on b.mem_num = m.mem_num
-	 where rn between #{start} and #{end}
+	 select b.*, m.mem_nickname, m.mem_img from (select rownum rn, A.* from (select * from f_sh_board_reply where board_num = #{board_num} order by br_re_group desc, br_re_step asc)A) b left join f_member m on b.mem_num = m.mem_num where rn between #{start} and #{end}
 	</select>
 	<!-- 댓글 많은 수 -->
 	<select id="replylist_sh" resultType="SH_BoardDTO">
@@ -244,16 +168,11 @@
 	</select>
 	<!-- 중고게시판 댓글 작성 -->
 	<insert id="insertReply_sh" parameterType="SH_board_replyDTO">
-		insert into f_sh_board_reply
-		values(#{mem_num},#{board_num},f_board_reply_seq.nextval,
-		       #{br_content},sysdate,#{br_re_level},#{br_re_group},#{br_re_step},0)
+		insert into f_sh_board_reply values(#{mem_num},#{board_num},f_board_reply_seq.nextval,#{br_content},sysdate,#{br_re_level},#{br_re_group},#{br_re_step},0)
 	</insert>
 	<!-- 중고 댓글 가져오기 -->
 	<select id="getReply_sh" parameterType="int" resultType="SH_board_ReplyDTO">
-		select b.*,m.mem_nickname, m.mem_img
-		from(select * from f_sh_board_reply
-		              where br_num =#{br_num}) b
-		    inner join f_member m on b.mem_num = m.mem_num
+		select b.*,m.mem_nickname, m.mem_img from(select * from f_sh_board_reply where br_num =#{br_num}) b inner join f_member m on b.mem_num = m.mem_num
 	</select>
 	<!-- 중고 댓글 수정 -->
 	<update id="updateReply_sh" parameterType="SH_board_replyDTO">
@@ -285,12 +204,7 @@
 	<!-- 중고게시판 리스트 --> 
 	<select id="listBoard_sh" parameterType="map" resultType="SH_boardDTO">
 		<!-- select * from (select rownum rn, A.* from (select * from f_sh_board order by board_re_group desc, board_re_step asc)A) where rn between #{start} and #{end} order by board_num desc -->
-	 select b.*, m.mem_nickname, m.mem_img
-	 from (select rownum rn, A.*
-	       from (select * from f_sh_board order by board_num desc)A) b
-	     left join f_member m
-	         on b.mem_num = m.mem_num
-	 where rn between #{start} and #{end}
+	 select b.*, m.mem_nickname, m.mem_img from (select rownum rn, A.* from (select * from f_sh_board order by board_num desc)A) b left join f_member m on b.mem_num = m.mem_num where rn between #{start} and #{end}
 	</select>
 	
 	<!-- 중고게시판 글목록 개수  -->
@@ -299,14 +213,7 @@
 	</select>
 	<!--중고게시글 검색 -->
 	<select id="findSH" parameterType="map" resultType="SH_boardDTO">
-  		select b.*, m.mem_nickname
-  		from (select rownum rn, A.*
-  		      from (select * from f_sh_board order by board_re_group desc, board_re_step asc)A) b
-  		    left join f_member m
-  		        on b.mem_num = m.mem_num
-  		where ${search} like '%'||#{searchString}||'%'
-  		  and not board_content='-'
-  		  and rn between #{start} and #{end}
+  		select b.*, m.mem_nickname from (select rownum rn, A.* from (select * from f_sh_board order by board_re_group desc, board_re_step asc)A) b left join f_member m on b.mem_num = m.mem_num where ${search} like '%'||#{searchString}||'%' and not board_content='-' and rn between #{start} and #{end}
  	</select>
  		<!-- 검색용 페이지 수 중고 -->
  	<select id="getCountFind_sh" parameterType="map" resultType="int">
@@ -314,35 +221,20 @@
  	</select>
  	<!-- 중고게시판 닉네임 검색용 쿼리 -->
  	<select id="getCountFind_nick_sh" parameterType="map" resultType="int">
-		 select count(m.mem_nickname)
-		 from f_sh_board b left join f_member m
-		     on b.mem_num = m.mem_num
-		 where m.mem_nickname like '%'||#{searchString}||'%'
+		 select count(m.mem_nickname) from f_sh_board b left join f_member m on b.mem_num = m.mem_num where m.mem_nickname like '%'||#{searchString}||'%'
  	</select>
  	<!-- 중고 거래 정렬 글목록 개수 -->
  	<select id="getCountBoard_sort" parameterType="map" resultType="int">
- 	 select count(*) from f_sh_board
- 	                 where board_condition = #{board_condition}
+ 	 select count(*) from f_sh_board where board_condition = #{board_condition}
  	</select>
  	<!-- 중고 게시글 거래 정렬 -->
  	<select id="sortlist_sh" parameterType="map" resultType="SH_boardDTO">
- 	select b.*, m.mem_nickname
- 	from (select rownum rn, A.*
- 	      from (select * from f_sh_board order by board_re_group desc, board_re_step asc)A) b
- 	    left join f_member m
- 	        on b.mem_num = m.mem_num
- 	where board_condition=#{board_condition}
- 	  and rn between #{start} and #{end}
+ 	select b.*, m.mem_nickname from (select rownum rn, A.* from (select * from f_sh_board order by board_re_group desc, board_re_step asc)A) b left join f_member m on b.mem_num = m.mem_num where board_condition=#{board_condition} and rn between #{start} and #{end}
  	</select>
  	
 	<!-- 중고게시판 글작성 -->
 	<insert id="insertBoard_sh" parameterType="SH_boardDTO">
-		insert into f_sh_board
-		values(f_board_seq.nextval,#{board_title},sysdate,
-		       #{mem_num},#{board_content},#{board_ip},
-		       #{board_img1},#{board_img2},#{board_img3},#{board_img4},
-		       #{board_re_level},#{board_re_step},#{board_re_group},0,0,
-		       #{board_location},#{board_price},#{board_package},#{board_condition},0)
+		insert into f_sh_board values(f_board_seq.nextval,#{board_title},sysdate,#{mem_num},#{board_content},#{board_ip},#{board_img1},#{board_img2},#{board_img3},#{board_img4},#{board_re_level},#{board_re_step},#{board_re_group},0,0,#{board_location},#{board_price},#{board_package},#{board_condition},0)
 	</insert>
 	
 	<!-- 중고게시판  글삭제 -->
@@ -355,15 +247,7 @@
 	</delete>
 	<!-- 중고게시판 글수정 -->
 	<update id="updateBoard_sh" parameterType="SH_boardDTO">
-		update f_sh_board set board_title=#{board_title},
-		                      board_content=#{board_content},
-		                      board_img1=#{board_img1,jdbcType=VARCHAR},
-		                      board_img2=#{board_img2,jdbcType=VARCHAR},
-		                      board_img3=#{board_img3,jdbcType=VARCHAR},
-		                      board_img4=#{board_img4,jdbcType=VARCHAR},
-		                      board_location=#{board_location},board_price=#{board_price},
-		                      board_package=#{board_package},board_condition=#{board_condition}
-		                  where board_num=#{board_num}
+		update f_sh_board set board_title=#{board_title}, board_content=#{board_content}, board_img1=#{board_img1,jdbcType=VARCHAR},board_img2=#{board_img2,jdbcType=VARCHAR},board_img3=#{board_img3,jdbcType=VARCHAR},board_img4=#{board_img4,jdbcType=VARCHAR},board_location=#{board_location},board_price=#{board_price},board_package=#{board_package},board_condition=#{board_condition} where board_num=#{board_num}
 	</update>
 	<!-- 중고게시판 답글 -->
 	<select id ="maxRe_group_sh" resultType="int">
@@ -379,18 +263,14 @@
 	</update>
  	<!-- 중고게시판 상세보기 -->
 	<select id="getBoard_sh" parameterType="int" resultType="SH_boardDTO">
-		select b.*,m.mem_nickname, m.mem_img
-		from(select * from f_sh_board where board_num =#{board_num}) b
-		    inner join f_member m on b.mem_num = m.mem_num
+		select b.*,m.mem_nickname, m.mem_img from(select * from f_sh_board where board_num =#{board_num}) b inner join f_member m on b.mem_num = m.mem_num
 	</select>
 	
  	
  	<!-- reportDTO 만들고 value 값 받아서 어드민한테 넘기기 -->
  	<!-- 신고 상세 정보 넘기기  -->
  	<insert id="report" parameterType="ReportDTO">
- 	insert into f_report
- 	values(f_report_seq.nextval,#{mem_num},#{report_target},#{report_mode},#{report_content},
- 	       sysdate,0,#{report_detail})
+ 	insert into f_report values(f_report_seq.nextval,#{mem_num},#{report_target},#{report_mode},#{report_content},sysdate,0,#{report_detail})
  	</insert>
  	<!-- 익명, 자유 게시글 신고 -->
  	<update id="reportBoard" parameterType="int">

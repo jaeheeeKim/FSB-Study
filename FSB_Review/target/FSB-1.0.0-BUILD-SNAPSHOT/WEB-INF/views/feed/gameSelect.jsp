@@ -12,6 +12,7 @@
 	
 	<script>
 	function selectGame(game_num,game_name){
+		alert(game_name);
 		opener.selectGameOK(game_num,game_name);
 		self.close();
 	}

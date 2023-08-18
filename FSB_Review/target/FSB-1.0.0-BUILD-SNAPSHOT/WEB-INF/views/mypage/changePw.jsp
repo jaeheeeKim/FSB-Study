@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 
 <body>
-<!-- 비밀번호 재설정.jsp -->
+ 
 
   		  <!-- 비밀번호 수정 -->
     <tr id="change-password-area" style="">

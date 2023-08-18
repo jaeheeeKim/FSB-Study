@@ -9,7 +9,6 @@
 
  <link rel="stylesheet" type="text/css" href="resources/css/button.css">
 
-<!--아이디 찾기 완료 후 찾은 아이디 보여주는.jsp -->
     
 <!DOCTYPE html>
 <html>

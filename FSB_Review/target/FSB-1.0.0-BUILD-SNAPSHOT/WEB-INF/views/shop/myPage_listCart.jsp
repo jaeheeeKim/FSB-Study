@@ -4,56 +4,15 @@
 <!-- myPage_listCart.jsp -->
 
 <td>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<script type="text/javascript">
-	function checkDel(cart_num, prod_num){
-		var isDel = window.confirm("정말로 삭제하겠습니까?");
-		if (isDel){
-			//위의 dto.cart_num과 dto.prod_num을 생성된 value에 넣어준 후 보낸거임!!!
-			document.deleteOne.cart_num.value = cart_num;
-			document.deleteOne.prod_num.value = prod_num;
-			document.deleteOne.submit();
-		}
-	}
-	
-	//선택 상품만 [선택 삭제]
-	function goDelete(prod_num){
-		f.action="shop_checkDeleteCart.do"; 
-		f.prod_num.value = prod_num;//필요없음 controller도 mem_num으로 바꾸기
-		f.submit();
-	}
-	
-	function updateCart(prod_num, game_num, cart_num){ // 수정폼 컨트롤러로 보내서 넘겨오기
-		var cart_qty = document.getElementById('cart_qty').value;
-		$.ajax({
-			url : 'shop_updateCart.do',
-			type : 'get',
-		    data:{'prod_num': prod_num, 'cart_qty' : cart_qty, 'game_num' : game_num, 'cart_num' : cart_num},  //보낼 데이터 (json 형식)
-		    success: function(data) {
-		   		alert("성공");
-		   		location.reload();
-		    }, 
-		    error: function(err) {
-		    	alert("장바구니 수정 에러");
-		    	location.reload();
-		    }
-		});
-	}
-	
-	//장바구니 상품 [주문결제]
-	function goOrder(){
-		f.action="shop_cartOrder.do";
-		f.submit();
-	}
-</script>
-			<div class="col-9 py-2 justify-content-center">
 <form name="f" method="post">
 	<!-- 선택 삭제 -->
 	<input type="hidden" name="prod_num" ${prod_num}>
 	<!-- 주문결제 -->
 	<input type="hidden" name="cart_qty" value="0">
 
+		<table width="70%" align="center">
+			<tr>
+				<td>
 			<h4 class="pb-2" align="left">
 				<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-cart4" viewBox="0 0 18 18">
 				  <path d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5zM3.14 5l.5 2H5V5H3.14zM6 5v2h2V5H6zm3 0v2h2V5H9zm3 0v2h1.36l.5-2H12zm1.11 3H12v2h.61l.5-2zM11 8H9v2h2V8zM8 8H6v2h2V8zM5 8H3.89l.5 2H5V8zm0 5a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0zm9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0z"/>
@@ -104,13 +63,16 @@
 						<td align="left"><img src="resources/img/${dto.game_img}" width="100" height="100"> [${dto.prod_company}] ${dto.game_name}</td>
 						<td>${df.format(dto.prod_price)}원</td>
 						<td> 
-							<!-- form 겹치기때문에  Ajax로 넘길거임!!!!!!!!! -->
-							<div class="input-group input-group-sm">
-								<input type="text" name="cart_qty" id="cart_qty" class="form-control" placeholder="${dto.cart_qty}" aria-label="cart_qty" aria-describedby="button-addon2">
-								<button class="btn btn-outline-secondary" type="button" onclick="javascript:updateCart('${dto.prod_num}','${dto.game_num}','${dto.cart_num}')" method="post">수정</button>
-							</div>						
-							
-							
+							<!-- form 겹치기때문에 이거말고 Ajax로 넘길거임!!!!!!!!! -->
+<%-- 							<form name="f" action="shop_updateCart.do" method="post">
+								<div class="input-group input-group-sm">
+								  <input type="text" name="cart_qty" class="form-control" placeholder="${dto.cart_qty}" aria-label="cart_qty" aria-describedby="button-addon2">
+								  <button class="btn btn-outline-secondary" type="submit">수정</button>
+								</div>
+								<input type="hidden" name="prod_num" value="${dto.prod_num}"/>
+								<input type="hidden" name="game_num" value="${dto.game_num}"/>
+								<input type="hidden" name="cart_num" value="${dto.cart_num}"/>								
+							</form> --%>
 						</td>
 						<td><font color="blue">${df.format(dto.prod_point * dto.cart_qty)}P</font></td>
 					<c:if test="${dto.prod_discount eq 0}">
@@ -120,7 +82,7 @@
 						<td>${df.format((dto.prod_price * dto.cart_qty)-(dto.prod_price * dto.cart_qty * dto.prod_discount * 0.1))}원</td>
 					</c:if>
 						<td> <!-- 장바구니에 담긴 상품 삭제버튼(X) javascript(shop_view2참고)로 바로 적용되게끔! -->
-							<a href="javascript:checkDel('${dto.cart_num}','${dto.prod_num}')">
+							<a href="javascript:checkDel('${dto.cart_num},${dto.prod_num}')">
 							<c:set var="cart_num" value="${dto.cart_num}"/>
 							<c:set var="prod_num" value="${dto.prod_num}"/>
 							<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-x-lg" viewBox="0 -4 20 20">
@@ -262,38 +224,22 @@
 					</tr>
 				</table>
 				<c:if test="${not empty listCart}">
-				<table border="0" width="30%" align="center">
-					<tr align="right">
-						<th align="center"><h5>총 상품 금액</h5></th>
-						<td><h5>${df.format(cartTotalPrice)}원</h5></td>
+				<table width="25%" align="center">
+					<tr>
+						<td><b>총 결제 금액<br>배송비(조건)<br><h5>최종결제금액</h5></b></td>
+						<td align="right"><b>${df.format(cartTotalPrice)}원<br>${df.format(cartTotalDelchar)}원<h5>${df.format(cartTotalPrice+cartTotalDelchar)}원</h5></b></td>
 					</tr>
-					<tr align="right">
-						<th align="center"><h5>배송비(조건)</h5></th>
-					<c:if test="${cartTotalPrice < 50000}">
-						<td><h5>${df.format(cartTotalDelchar)}원</h5></td>
-					</c:if>
-					<c:if test="${cartTotalPrice >= 50000}">
-						<td><h5>무료</h5></td>
-					</c:if>	
-					</tr>
-					<tr align="right">
-						<th align="center"><h5>최종 결제 금액</h5></th>
-					<c:if test="${cartTotalPrice < 50000}">
-						<td><h5>${df.format(cartTotalPrice+cartTotalDelchar)}원</h5></td>
-					</c:if>
-					<c:if test="${cartTotalPrice >= 50000}">
-						<td><h5>${df.format(cartTotalPrice)}원</h5></td>
-					</c:if>		
-					</tr>
-					
 				</table>
 				</c:if>
 				<div align="center">
 				<c:if test="${not empty listCart}"> <button class="btn btn-outline-dark" type="button" onclick="javascript:goOrder()">주문하기</button></c:if>
 				<button class="btn btn-outline-dark" type="button" onclick="history.back()">돌아가기</button>
 				</div>
+			</div>
+</td>
+</tr>
+</table>
 </form>			
-			</div>		
 			
 		</div>
 	</div>

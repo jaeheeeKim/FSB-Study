@@ -22,6 +22,23 @@
 		f.submit();
 	}
 	
+/* 	function updateCart(cart_num){ // 댓글 에이젝스 수정 폼 끌어오기
+		$.ajax({
+	    url:'shop_updateCart.do', //request 보낼 서버의 경로
+	    type:'get', // 메소드(get, post, put 등)
+	    data:{'cart_num' : cart_num}, //보낼 데이터 (json 형식)
+	    success: function(data) { // 컨트롤러 리턴값
+
+	    	$("#updateCart"+cart_num).html(data);
+	    	//위 부분은 input에 넣어야함!!!(포인트 넣는거 참고!)★★★★★★★★★★★★
+	    },
+	    error: function(err) {
+	    	alert("ajax 처리 중 에러 발생");
+	        //서버로부터 응답이 정상적으로 처리되지 못했을 때 실행
+	    }
+	});
+	} */
+	
 	function updateCart(prod_num, game_num, cart_num){ // 수정폼 컨트롤러로 보내서 넘겨오기
 		var cart_qty = document.getElementById('cart_qty').value;
 		$.ajax({
@@ -29,7 +46,7 @@
 			type : 'get',
 		    data:{'prod_num': prod_num, 'cart_qty' : cart_qty, 'game_num' : game_num, 'cart_num' : cart_num},  //보낼 데이터 (json 형식)
 		    success: function(data) {
-		   		alert("수정 되었습니다.");
+		   		alert("성공");
 		   		location.reload();
 		    }, 
 		    error: function(err) {

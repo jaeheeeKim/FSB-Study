@@ -69,6 +69,7 @@
 			}
 			//이미지 확장자&크기 제한
 			let fileName = file.name;
+			alert(fileName);
 			let fileSize = file.size;
 			let isOk = checkExtension(fileName,fileSize);
 			if(!isOk){

@@ -61,7 +61,7 @@
 						<td colspan="4" style="border-top: hidden">
 							<div class="collapse" id="collapseExample${dto.sq_num}">
 								<div class="card card-body">
-									<b>${dto.sq_title}</b>
+									<b>${dto.sq_title}</b><hr>
 									${dto.sq_content}
 									<table>
 										<tr>
@@ -81,14 +81,6 @@
 											</td>
 										</tr>
 									</table>
-									<hr>
-									<code>❓ <b>관리자 답변 </b></code>
-									<c:if test="${dto.sq_reply eq null}">
-        							답변을 기다리고 있습니다.
-					        		</c:if>
-					        		<c:if test="${dto.sq_reply ne null}">
-					        			${dto.sq_reply}
-					        		</c:if>
 								</div>
 							</div>
 						</td>
@@ -97,7 +89,7 @@
 </c:if>
 				</table>
 				<div align="right">
-					<a href="shop_insertQnA.do?prod_num=${prod_num}"><button class="btn btn-outline-dark" type="button">문의하기</button></a>
+					<a href="shop_insertQnA.do"><button class="btn btn-outline-dark" type="button">문의하기</button></a>
 				</div>
 			</div>
 <form name="f" action="shop_view4.do" method="post">

@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<!-- d알람리스트.jsp.jsp -->
+<!-- gameLikeList.jsp -->
 <%@include file="../user/user_top.jsp" %>
 
 <link rel="stylesheet" type="text/css" href="resources/css/popup.css">

@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<!-- 이미지 변경.Jsp -->
+
 <body>
  
 <tr class="my-info-img" id="profile-image-area" style="">

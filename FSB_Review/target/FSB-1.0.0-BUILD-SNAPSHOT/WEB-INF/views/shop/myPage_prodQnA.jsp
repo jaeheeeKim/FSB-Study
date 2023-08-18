@@ -70,12 +70,12 @@
 				<br>
         		<code>❓ <b>관리자 답변 </b></code>
         		<br>
-        		  <c:if test="${dto.sq_check eq 0}">
-                 답변을 기다리고 있습니다.
-              </c:if>
-              <c:if test="${dto.sq_check eq 1}">
-                 ${dto.sq_reply}
-              </c:if>
+        		<c:if test="${dto.sq_reply eq 0}">
+        			답변을 기다리고 있습니다.
+        		</c:if>
+        		<c:if test="${dto.sq_reply ne 0}">
+        			${dto.sq_reply}
+        		</c:if>
       			</div>
     			</div>
   				</div>

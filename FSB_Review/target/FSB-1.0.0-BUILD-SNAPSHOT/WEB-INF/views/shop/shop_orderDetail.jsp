@@ -112,7 +112,7 @@
 			<b>주문 상세 내역 <font size="4px" color="gray"> </font></b></h4>
 			<table class="table table-bordered" border="1" width="100%" align="center">
 					<thead>
-					<tr align="center">
+					<tr align="center" class="table-light">
 						<th width="%" style="border-right: hidden">상품명</th>
 						<th width="%" style="border-right: hidden">상품 가격</th>
 						<th width="%" style="border-right: hidden">수량</th>
@@ -146,7 +146,7 @@
 						<th colspan="3" height="50"><font size="4">&nbsp배송 정보</font></th>
 					</tr>
 					</thead>
-					<c:forEach var="dto" items="${listOrderDetailView}" begin="0" end="0">
+					<c:forEach var="dto" items="${listOrderDetailView}" begin="1" end="1">
 					<tr valign="middle">
 						<th class="table-light">&nbsp받으실 분 </th>
 						<td>${dto.order_name}</td>
@@ -179,18 +179,18 @@
 						<th colspan="2" height="50"><font size="4">&nbsp결제 정보</font></th>
 					</tr>
 					</thead>
-					<c:forEach var="dto" items="${listOrderDetailView}" begin="0" end="0">
+					<c:forEach var="dto" items="${listOrderDetailView}" begin="1" end="1">
 					<tr valign="middle">
 						<th class="table-light" width="25%">&nbsp총 상품 금액</th>
-						<td>${sessionScope.df.format(dto.order_price)}원</td>
+						<td>${dto.order_price}원</td>
 					</tr>
 					<tr valign="middle">
 						<th class="table-light">&nbsp쿠폰 할인 금액</th>
-						<td>${sessionScope.df.format(dto.order_coupon)}원</td>
+						<td>${dto.order_coupon}원</td>
 					</tr>
 					<tr valign="middle">
 						<th class="table-light">&nbsp포인트 할인 금액</th>
-						<td>${sessionScope.df.format(dto.order_point)}원</td>
+						<td>${dto.order_point}원</td>
 					</tr>
 					<tr valign="middle">
 						<th class="table-light">&nbsp결제 방식</th>
@@ -198,7 +198,7 @@
 					</tr>
 					<tr valign="middle">
 						<th class="table-light">&nbsp최종 결제 금액</th>
-						<td>${sessionScope.df.format(dto.order_receiptprice)}원</td>
+						<td>${dto.order_receiptprice}원</td>
 					</tr>
 					</c:forEach>	
 				</table>				

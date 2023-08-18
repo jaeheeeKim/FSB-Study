@@ -96,7 +96,7 @@
 		<c:forEach var="ndto" items="${nlistBoard}">
 			<tr>
 			<td><strong>공지</strong></td>
-			<td width="40%"><a href="board_noti_content.do?n_num=${ndto.n_num}&mode=" class="link-danger text-decoration-none link-opacity-50-hover"><strong>📢${ndto.n_title}</strong></a></td>
+			<td width="40%" align="left"><a href="board_noti_content.do?n_num=${ndto.n_num}&mode=" class="link-danger text-decoration-none link-opacity-50-hover"><strong>📢${ndto.n_title}</strong></a></td>
 			<td>관리자</td>
 			<td>${ndto.n_regdate}</td>
 			<td>-</td>

@@ -38,25 +38,8 @@
 	}
 	
 </style>
-<script>
-function check() {
-	if (f.bpr_title.value == "") {
-		alert("리뷰 제목을 입력해주세요!")
-		f.board_title.focus()
-		return false
-	}if (f.bpr_content.value == "") {
-		alert("리뷰 내용을 입력해주세요!")
-		f.board_title.focus()
-		return false
-	}
-	if(f)
-		f.action = 'bp_insertReview.do';
-		f.submit();
-		return true
-}
-</script>
-<script type="text/javascript">
 
+<script type="text/javascript">
 	let sorted_files = []; //이미지 배열
 	
 	//등록
@@ -84,7 +67,8 @@ function check() {
 		}
 		//submit동작
 		function submitFormAction(){
-			check();
+			f.action = 'bp_insertReview.do';
+			f.submit();
 		}
 	}
 	//이미지 Base64로 전환

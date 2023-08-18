@@ -2,7 +2,6 @@
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <%@include file="../user/user_top.jsp" %>
-<!-- 탈퇴시안내사항.jsp -->
 <link rel="stylesheet" type="text/css" href="resources/css/file.css">
 <script type="text/javascript">
 

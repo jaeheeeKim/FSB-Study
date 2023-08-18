@@ -47,31 +47,31 @@
 	      <tr height="50" align="center">
 	         <th>난이도별&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div class="vr"></div></th>
 				<td colspan="2">
-					<input type="checkbox" name="game_level" value="1">
+					<input type="checkbox" name="prod_starrating" value="1">
   						<c:forEach begin="1" end="1">
     						<img src="resources/img/fire.png" width="15" height="15">
     					</c:forEach>			
     			</td>
 				<td>
-					<input type="checkbox" name="game_level" value="2">
+					<input type="checkbox" name="prod_starrating" value="2">
     					<c:forEach begin="1" end="2">
 							<img src="resources/img/fire.png" width="15" height="15">
 						</c:forEach>
 				</td>
 				<td>
-					<input type="checkbox" name="game_level" value="3">
+					<input type="checkbox" name="prod_starrating" value="3">
     					<c:forEach begin="1" end="3">
 							<img src="resources/img/fire.png" width="15" height="15">
 					</c:forEach>
 				</td>
 				<td>
-					<input type="checkbox" name="game_level" value="4">
+					<input type="checkbox" name="prod_starrating" value="4">
     					<c:forEach begin="1" end="4">
 							<img src="resources/img/fire.png" width="15" height="15">
 					</c:forEach>
 				</td>
 				<td>
-					<input type="checkbox" name="game_level" value="5">
+					<input type="checkbox" name="prod_starrating" value="5">
     					<c:forEach begin="1" end="5">
 							<img src="resources/img/fire.png" width="15" height="15">
 						</c:forEach>
@@ -92,7 +92,7 @@
 	<div class="container px-3 py-3 bg-light" id="featured-best">
 		<h4 class="pb-2 border-bottom">인기 보드게임</h4>
 		<div class="row row-cols-4">
-			<c:forEach var="dto" items="${listRank}" begin="0" end="3">
+			<c:forEach var="dto" items="${listRank}" begin="1" end="4">
 			<div class="feature col">
 				<div class="pb-2"><a href="shop_view.do?prod_num=${dto.prod_num}"><img src="resources/img/${dto.game_img}" width="310" height="310" class="img-responsive img-rounded img-thumbnail"></a></div>
 				<c:if test="${empty dto.prod_starratingAvg}">

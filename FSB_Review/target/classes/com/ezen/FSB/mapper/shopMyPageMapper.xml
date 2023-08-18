@@ -156,6 +156,6 @@
 	
 	<!-- 상세보기 클릭으로 상품 찾기 (별점별) -->
 	<select id="checkListProd3" parameterType="int" resultType="ShopProductDTO">
-		select * from f_product inner join f_game on f_product.game_num = f_game.game_num where f_game.game_level = #{game_level}	
+		select * from f_product where prod_starrating = #{prod_starrating}
 	</select>
  </mapper>

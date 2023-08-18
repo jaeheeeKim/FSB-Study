@@ -47,11 +47,11 @@
 		});
 	} 
 	
-	function deleteLike(prod_num, mode) {
+	function deleteLike(prod_num) {
 		$.ajax({
 		    url:'shop_deleteLike.do', //request 보낼 서버의 경로
 		    type:'get', // 메소드(get, post, put 등)
-		    data:{'prod_num': prod_num, 'mode' : mode},  //보낼 데이터 (json 형식)
+		    data:{'prod_num': prod_num},  //보낼 데이터 (json 형식)
 		    success: function(data) {
 		   		/* alert("성공"); */
 		   		location.reload();
@@ -95,11 +95,11 @@
 			<hr>
 			</div>
 			<div class="col-4">
-				<img src="resources/img/${getProd.game_img}" width="95%" height="380">
+				<img src="resources/img/${getProd.game_img}" width="95%" height="350">
 			</div>
-			<div class="col-5 py-1" style="height:350px;">
+			<div class="col-5 py-3" style="height:350px;">
 				<h5><b>[${getProd.prod_company}] ${getProd.game_name}</b></h5>
-				<div style="overflow: scroll; height: 60px;"><h6>${getProd.game_content}</h6></div>
+				<h6>${getProd.game_content}</h6>
 				<c:if test="${reviewAvg eq null}">
 				<h6>
 					<c:forEach begin="1" end="5">
@@ -139,7 +139,7 @@
 				<a href="#"><button type="button" class="btn btn-sm" style="--bs-btn-padding-y: .13rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .90rem; background: rgb(234,234,234);">#5~6인</button></a>
 				<br>
 				난이도&nbsp&nbsp&nbsp&nbsp&nbsp								
-				<a href="#"><button type="button" class="btn btn-sm" style="--bs-btn-padding-y: .13rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .90rem; background: rgb(250,244,192);">#<img src="resources/img/fire.png" width="20" height="20"><img src="resources/img/fire.png" width="20" height="20"></button></a>
+				<a href="#"><button type="button" class="btn btn-sm" style="--bs-btn-padding-y: .13rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .90rem; background: rgb(250,244,192);">#☆☆</button></a>
 				<hr>
 			</div>
 		</div>
@@ -183,8 +183,8 @@
 				<table border="1" width="100%">
 					<tr height="35" valign="middle">
 						<td align="center" width="33%">주문수량</td>
-						<td width="20%"> </td>
-						<td align="right" width="47%" valign="middle">
+						<td width="33%"> </td>
+						<td align="right" width="33%" valign="middle">
                   <form name="f" method="post">
                   	<input type="number" name="cart_qty" value="1" min="0" max="100" maxLength="2" step="1">
 <!--                      <div class="input-group input-group-sm">
@@ -221,7 +221,7 @@
 							</div>
 							<div class="like">
 							<!-- 누르면 빈 하트로 변경하고 f_shop_like에서 삭제 -->
-							<a href="javascript:deleteLike('${getProd.prod_num}','view')">
+							<a href="javascript:deleteLike('${getProd.prod_num}')">
 								<c:if test="${like eq 1}">	<!-- 해당 회원의 상품찜하기가 있다면 꽉찬하트 -->
 									<img src="resources/img/like3.png" width="25" height="25" class="like-2">
 									<img src="resources/img/like2.png" width="26" height="26" class="like-3">							
@@ -247,20 +247,10 @@
 						<div class="row mx-auto">
 						<c:if test="${isLogin=='true'}">
 							<button class="btn btn-outline-dark" type="button" onclick="javascript:goCart()">장바구니</button>
-						</c:if>
-						<c:if test="${isLogin=='false'}">
-							<button class="btn btn-outline-dark" type="button" onclick="javascript:checkLogin()">장바구니</button>
-						</c:if>
-						</div>
-						</div>
-						</td>
-						<td>
-						<div class="container text-center">
-						<div class="row mx-auto">
-						<c:if test="${isLogin=='true'}">
 							<button class="btn btn-outline-dark" type="button" onclick="javascript:goOrder()">구매하기</button>
 						</c:if>
 						<c:if test="${isLogin=='false'}">
+							<button class="btn btn-outline-dark" type="button" onclick="javascript:checkLogin()">장바구니</button>
 							<button class="btn btn-outline-dark" type="button" onclick="javascript:checkLogin()">구매하기</button>
 						</c:if>
 						</div>

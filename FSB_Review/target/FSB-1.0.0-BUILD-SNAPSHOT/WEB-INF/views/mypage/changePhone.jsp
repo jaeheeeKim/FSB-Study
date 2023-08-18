@@ -9,7 +9,7 @@
 <script src="resources/js/bootstrap.bundle.min.js"></script>
 
  <link rel="stylesheet" type="text/css" href="resources/css/button.css">
-<!-- 핸드폰 번호 변경 .jsp  -->
+
     
 <!DOCTYPE html>
 <html>

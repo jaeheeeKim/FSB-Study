@@ -10,7 +10,6 @@
 
  <link rel="stylesheet" type="text/css" href="resources/css/button.css">
 
-<!-- 아이디 / 비밀번호 찾기 처음 누르면 나오는.jsp  -->
     
 <!DOCTYPE html>
 <html>

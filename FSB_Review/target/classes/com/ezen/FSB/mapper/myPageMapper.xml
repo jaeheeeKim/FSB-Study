@@ -104,12 +104,12 @@
 	
 	<!-- 자유게시판 댓글 리스트 -->  
 	<select id="freeReply" parameterType="map" resultType="boardDTO">
-	select * from (select * from f_board_reply where mem_num = #{num})A inner join (select * from f_board inner join f_member on f_board.mem_num = f_member.mem_num) b on b.board_num = A.board_num where b.board_anony_check = 0
+	select * from (select * from f_board_reply where mem_num = #{num})A inner join (select * from f_board inner join f_member on f_board.mem_num = f_member.mem_num) b on b.board_num = A.board_num where b.board_anony_check = 1
 	</select>
 	
 	<!-- 익명게시판 댓글 리스트 -->  
 	<select id="secretReply" parameterType="map" resultType="boardDTO">
-	select * from (select * from f_board_reply where mem_num = #{num})A inner join f_board b on b.board_num = A.board_num where b.board_anony_check = 1
+	select * from (select * from f_board_reply where mem_num = #{num})A inner join f_board b on b.board_num = A.board_num where b.board_anony_check = 0
 	</select>
 	
 	<!-- 중고 게시판 댓글 리스트 -->  

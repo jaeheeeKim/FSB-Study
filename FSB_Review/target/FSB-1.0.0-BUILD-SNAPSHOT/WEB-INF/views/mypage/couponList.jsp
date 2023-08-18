@@ -49,7 +49,8 @@ function check(){
                             <p class="card-text"><font color="red">${dto.bc_duedate}에 만료</font></p>
                       <div class="card-footer">
                     <!-- 만약 쿠폰 수량이 0보다 작거나 같다면 쿠폰 소진 -->
-                 <%--      <div align="center"><strong>${dto.bp_store_name}</strong></div> --%>
+                       
+                      <div align="center"><strong>${dto.bp_store_name}</strong></div>
                 </div>
 			</div>
 			</div>

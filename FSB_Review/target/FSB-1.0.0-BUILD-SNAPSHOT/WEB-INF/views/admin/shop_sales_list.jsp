@@ -51,7 +51,7 @@
 		      		<c:forEach items="${listRank}" var="dto">
 		      		<div class="col">
 				      	<div class="card" style="width: 16rem;">
-		  					<img src="resources/img/${dto.game_img}" width="150" height="150" class="card-img-top" alt="...">
+		  					<img src="resources/img/${dto.prod_img}" width="150" height="150" class="card-img-top" alt="...">
 			 					<div class="card-body">
 		    						<p class="card-text"><h6><font color="red"><c:if test="${j eq dto.detail_qty}"><c:set var="i" value="${i-1}"/></c:if>${i}위</font></h6>
 		    							<strong>상품명 : </strong>${dto.game_name}<br>

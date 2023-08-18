@@ -23,34 +23,7 @@ li p {width:100%; text-align:center} /* 텍스트가 가운데 정렬이 되도�
 <body>
    <ul class="nav justify-content-end">	
         <li class="nav-item"><a class="nav-link" href="shop_main.do">쇼핑몰 메인</a></li>   		
-   <c:set var="isLogin" value="false"/>
-   <c:if test="${not empty mbId or not empty mbName or not empty kname}">
-   <c:set var="isLogin" value="true"/>
-   </c:if>
-   
-   <c:if test="${isLogin=='true' and not empty loginMode and empty naverLogin}">
-     <li class="nav-item">            
-      <a class="nav-link" href="logout.do">로그아웃</a>
-      </li>
-   </c:if>
-   
-   <c:if test="${isLogin=='true' and empty loginMode and empty naverLogin}">
-     <li class="nav-item">            
-      <a class="nav-link" href="kakaologout.do?access_Token=${sessionScope.access_Token}">로그아웃</a>
-      </li>
-   </c:if>
-   
-   <c:if test="${isLogin=='true' and empty loginMode and not empty naverLogin}">
-   	<li class="nav-item">            
-      <a class="nav-link" href="naverLogout.do">로그아웃</a>
-     </li>
-   </c:if>
-   
-   <c:if test="${isLogin=='false'}">
-        <li class="nav-item">
-      <a class="nav-link" href="login.do">로그인</a>
-      </li>
-   </c:if>   
+        <li class="nav-item"><a class="nav-link active" aria-current="page" href="login.do">로그인</a></li>
         <li class="nav-item"><a class="nav-link" href="user_main.do">메인페이지로 가기</a></li>
    </ul>
 <br><br>
@@ -127,6 +100,7 @@ li p {width:100%; text-align:center} /* 텍스트가 가운데 정렬이 되도�
                    		<li><a href="shop_myPage_listLike.do" class="link-dark d-inline-flex text-decoration-none rounded">찜한 상품</a></li>
                   		<li><a href="shop_myPage_listCart.do" class="link-dark d-inline-flex text-decoration-none rounded">장바구니</a></li>
                   		<li><a href="user_shop_myPage.do" class="link-dark d-inline-flex text-decoration-none rounded">주문 목록</a></li>
+                  		<li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">취소·반품·환불·교환</a></li>
                   </ul>
               </div>
            </li>
