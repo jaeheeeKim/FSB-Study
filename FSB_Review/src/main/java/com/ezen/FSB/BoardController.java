@@ -58,32 +58,41 @@ public class BoardController {
 	@Resource(name = "uploadPath")
 	private String upPath;
 	
-	//ììœ ê²Œì‹œíŒ ë¦¬ìŠ¤íŠ¸ 
+	//mode·Î ÀÚÀ¯°Ô½ÃÆÇ,ÀÍ¸í°Ô½ÃÆÇ, Áß°í°Ô½ÃÆÇ ³ª´©¾úÀ½
+	//ÀÚÀ¯°Ô½ÃÆÇ mode = ""
+	//ÀÍ¸í°Ô½ÃÆÇ mode = "anony"
+	//Áß°í°Ô½ÃÆÇ ( ³ªÁß¿¡ ÄÁÆ®·Ñ·¯¸¸ ºĞ¸®ÇßÀ½ ) mode = "sh"
+	
+	//ÀÚÀ¯°Ô½ÃÆÇ ¸®½ºÆ® 
 	@RequestMapping("/board_free.do")
 	public ModelAndView board_free_list(HttpServletRequest req, java.util.Map<String, Integer> params) {
 		ModelAndView mav = new ModelAndView();
 		HttpSession session = req.getSession();
 		session.setAttribute("upPath", session.getServletContext().getRealPath("resources/images"));
-		
-		//ê³µì§€ì‚¬í•­ ë¦¬ìŠ¤íŠ¸ 
+
+
+		//°øÁö»çÇ× ¸®½ºÆ®
 		String mode = req.getParameter("mode");
+		//mode·Î °Ô½ÃÆÇ ¸¶´Ù ´Ù¸¥ °øÁö»çÇ× °¡Á®¿È
+		
 		List<NoticeDTO> nlist =boardMapper.nlistBoard(mode);
 		
-		//ì¡°íšŒìˆ˜ ìˆœ 
+		//Á¶È¸¼ö ¼ø (ÀÚÀ¯°Ô½ÃÆÇ)
 		List<BoardDTO> readlist = boardMapper.readlist();
 		mav.addObject("readlist", readlist);
-		//ëŒ“ê¸€ìˆœ
+		//´ñ±Û¼ø
 		List<BoardDTO> replylist = boardMapper.replylist();
 		mav.addObject("replylist", replylist);
-			//í˜ì´ì§€ ë„˜ë²„
-		int pageSize = 10;
+			//ÆäÀÌÁö ³Ñ¹ö
+		int pageSize = 10; // ÇÑÆäÀÌÁö¿¡ ±Û ¸î°³ µé¾î°¡´ÂÁö.
 		
+		//°Ô½Ã±Û ¸ñ·Ï ÂÊ¼ö
 		String pageNum = req.getParameter("pageNum");
 		if (pageNum == null) {
 			pageNum = "1";
 		}
-		int currentPage = Integer.parseInt(pageNum);
-		int startRow = (currentPage - 1) * pageSize + 1;
+		int currentPage = Integer.parseInt(pageNum); // ÇöÀç ÆäÀÌÁö 
+		int startRow = (currentPage - 1) * pageSize + 1; 
 		int endRow = startRow + pageSize - 1;
 		int count = boardMapper.getCountBoard();
 		params.put("start", startRow);
@@ -95,6 +104,8 @@ public class BoardController {
 		if (count > 0) {
 			list = boardMapper.listBoard(params);
 			int pageCount = (count / pageSize) + (count % pageSize == 0 ? 0 : 1);
+			//»ïÇ× Á¶°Ç¹® true¸é 0 false¸é 1
+			
 			int pageBlock = 2;
 			int startPage = (currentPage - 1) / pageBlock * pageBlock + 1;
 			int endPage = startPage + pageBlock - 1;
@@ -115,23 +126,23 @@ public class BoardController {
 	}
 	
 
-	//ìµëª…ê²Œì‹œíŒ ë¦¬ìŠ¤íŠ¸ 
+	//ÀÍ¸í°Ô½ÃÆÇ ¸®½ºÆ® 
 	@RequestMapping("/board_anony.do")
 	public ModelAndView boardAnony(HttpServletRequest req, java.util.Map<String, Integer> params) {
 		ModelAndView mav = new ModelAndView();
 		HttpSession session = req.getSession();
 		session.setAttribute("upPath", session.getServletContext().getRealPath("resources/images"));
 		
-		//ê³µì§€ì‚¬í•­ ë¦¬ìŠ¤íŠ¸ 
+		//°øÁö»çÇ× ¸®½ºÆ® 
 				String mode = req.getParameter("mode");
 				List<NoticeDTO> nlist =boardMapper.nlistBoard(mode);
-		//ì¡°íšŒìˆ˜ ìˆœ
+		//Á¶È¸¼ö ¼ø
 				List<BoardDTO> readlist = boardMapper.readlist_a();
 				mav.addObject("readlist", readlist);
-		//ëŒ“ê¸€ìˆœ
+		//´ñ±Û¼ø
 				List<BoardDTO> replylist = boardMapper.replylist_a();
 				mav.addObject("replylist", replylist);
-		//í˜ì´ì§€ ë„˜ë²„
+		//ÆäÀÌÁö ³Ñ¹ö
 		int pageSize = 10;
  
 		String pageNum = req.getParameter("pageNum");
@@ -171,23 +182,23 @@ public class BoardController {
 		mav.setViewName("board/list_anony");
 		return mav;
 	}
-	//ììœ ê²Œì‹œíŒ ì‘ì„±, ìµëª… ê²Œì‹œíŒ ê¸€ì‘ì„±
+	//ÀÚÀ¯°Ô½ÃÆÇ ÀÛ¼º, ÀÍ¸í °Ô½ÃÆÇ ±Û ÀÛ¼º Æû ¶ç¿ì±â
 	@RequestMapping(value = "/write_board.do", method = RequestMethod.GET)
 	public ModelAndView writeFormBoard(HttpServletRequest req, String mode) {
 		int num = 0, re_group = 0, re_step = 0, re_level = 0;
 		ModelAndView mav = new ModelAndView();
-		//ë¡œê·¸ì¸ ì²´í¬ 
+		//·Î±×ÀÎ Ã¼Å© 
 		HttpSession session= req.getSession();
 			MemberDTO mdto = (MemberDTO)session.getAttribute("login_mem");
 			if(mdto == null) {
 				session.invalidate();
 				mav.setViewName("message_back");
-				mav.addObject("msg","ë¡œê·¸ì¸ í•´ì£¼ì„¸ìš”" );
+				mav.addObject("msg","·Î±×ÀÎ ÇØÁÖ¼¼¿ä" );
 				return mav;
 			}
 		String snum = req.getParameter("board_num");
 		
-		if (snum != null) {
+		if (snum != null) { // ¸¸¾à ³Ñ¾î¿Â board_num ÀÖÀ¸¸é »õ±ÛÀÌ ¾Æ´Ï¶ó ´ä±ÛÀÓ.
 			num = Integer.parseInt(snum);
 			re_group = Integer.parseInt(req.getParameter("board_re_group"));
 			re_step = Integer.parseInt(req.getParameter("board_re_step"));
@@ -204,7 +215,7 @@ public class BoardController {
 		mav.setViewName("board/writeForm");
 		return mav;
 	}
-	//ììœ  ìµëª…ê²Œì‹œíŒ ê¸€ì‘ì„± 
+	//ÀÚÀ¯ ÀÍ¸í°Ô½ÃÆÇ ±ÛÀÛ¼º 
 		@RequestMapping(value = "/write_board.do", method = RequestMethod.POST)
 		public String writeProBoard(HttpServletRequest req, String mode, @RequestParam("filename") List<MultipartFile> multiFileList,@ModelAttribute BoardDTO dto, BindingResult result)
 				throws IllegalStateException, IOException {
@@ -214,38 +225,38 @@ public class BoardController {
 				dto.setBoard_img3("");
 				dto.setBoard_img4("");
 			}
-			//ë¡œê·¸ì¸ ì²´í¬ 
+			//·Î±×ÀÎ Ã¼Å© 
 			HttpSession session= req.getSession();
 				MemberDTO mdto = (MemberDTO)session.getAttribute("login_mem");
 				if(mdto == null) {
 					session.invalidate();
-					req.setAttribute("msg","ë¡œê·¸ì¸ í•´ì£¼ì„¸ìš”" );
+					req.setAttribute("msg","·Î±×ÀÎ ÇØÁÖ¼¼¿ä" );
 					req.setAttribute("url","login.do" );
 					return "message";
 				}
-			if(mode.equals("anony")) {
+			if(mode.equals("anony")) { //ÀÍ¸í°Ô½ÃÆÇ¿¡¼­ ÆûÀ» º¸³ÂÀ» °æ¿ì ÀÍ¸í ¼ÂÆÃ
 				dto.setBoard_anony_check(1);
 				req.setAttribute("board_anony_check",dto.getBoard_anony_check());
 			}
 			req.setAttribute("mode", "all");
-			dto.setBoard_ip(req.getRemoteAddr());
+			dto.setBoard_ip(req.getRemoteAddr()); // ip ¹Ş¾Æ¼­ set
 			
-			//ì´ë¯¸ì§€ ë°›ê¸°
-			MultipartHttpServletRequest mr = (MultipartHttpServletRequest) req;
+			//ÀÌ¹ÌÁö ¹Ş±â
+			MultipartHttpServletRequest mr = (MultipartHttpServletRequest) req; // multipart·Î »çÁø¹Ş±â
 			MultipartFile mf = mr.getFile("board_img1");
 			MultipartFile mf2 = mr.getFile("board_img2");
 			MultipartFile mf3 = mr.getFile("board_img3");
 			MultipartFile mf4 = mr.getFile("board_img4");
 			
-			String board_img1 = mf.getOriginalFilename();
+			String board_img1 = mf.getOriginalFilename(); //»çÁø ¹Ş¾Æ¿Â ÀÌ¸§
 			String board_img2 = mf2.getOriginalFilename();
 			String board_img3 = mf3.getOriginalFilename();
 			String board_img4 = mf4.getOriginalFilename();
 			
-			UUID uuid = UUID.randomUUID(); //ì´ë¯¸ì§€ ì¤‘ë³µ ì‹œ ì—‘ìŠ¤ë°•ìŠ¤ ë°©ì§€ìš© ëœë¤ íŒŒì¼ëª…
+			UUID uuid = UUID.randomUUID(); //ÀÌ¹ÌÁö Áßº¹ ½Ã ¿¢½º¹Ú½º ¹æÁö¿ë ·£´ı ÆÄÀÏ¸í
 
-			String upPath = session.getServletContext().getRealPath("/resources/img");
-			String upPath1 = session.getServletContext().getRealPath("/resources/files");
+			String upPath = session.getServletContext().getRealPath("/resources/img"); // ÀÌ¹ÌÁö¿ë upPath
+			String upPath1 = session.getServletContext().getRealPath("/resources/files"); // ÆÄÀÏ ¾÷·Îµå upPath1
 			session.setAttribute("upPath1", upPath1);
 			session.setAttribute("upPath", upPath);
 			
@@ -253,20 +264,20 @@ public class BoardController {
 			 dto.setMem_num(dto3.getMem_num());
 			BoardFilesDTO fdto = new BoardFilesDTO();
 
-			if (!mf.isEmpty()) { // ì´ë¯¸ì§€ ì²¨ë¶€ ë˜ì–´ìˆì„ ì‹œ
+			if (!mf.isEmpty()) { // ÀÌ¹ÌÁö Ã·ºÎ µÇ¾îÀÖÀ» ½Ã
 				board_img1 = uuid.toString() + "_" + board_img1;
 				File file1 = new File(upPath, board_img1);
 				mf.transferTo(file1);
 				dto.setBoard_img1(board_img1);
 				
-			} else if (mf.isEmpty()) { // ì´ë¯¸ì§€ ì²¨ë¶€ ì•ˆë˜ì–´ìˆì„ì‹œ
+			} else if (mf.isEmpty()) { // ÀÌ¹ÌÁö Ã·ºÎ ¾ÈµÇ¾îÀÖÀ»½Ã
 				dto.setBoard_img1("");
 			}
 				
 			 if (!mf2.isEmpty()) {
-				board_img2 = uuid.toString() + "_" + board_img2;
+				board_img2 = uuid.toString() + "_" + board_img2; // ·£´ı ÆÄÀÏ¸í ºÙ¿©ÁÖ±â 
 				File file2 = new File(upPath, board_img2);
-				mf2.transferTo(file2);
+				mf2.transferTo(file2); // ÀÌ¹ÌÁö ¿Ã·ÁÁÖ±â
 				dto.setBoard_img2(board_img2);
 				
 			} else if (mf2.isEmpty()) {
@@ -300,29 +311,30 @@ public class BoardController {
 			
 			int res = boardMapper.insertBoard(dto);
 			if (res > 0) {
-				  File fileCheck = new File(upPath1);
-			         if (!fileCheck.exists())
-			            fileCheck.mkdirs();
+				  File fileCheck = new File(upPath1); // ¾÷·Îµå µÈ ÆÄÀÏ check
+			         if (!fileCheck.exists()) // ¸¸¾à ÆÄÀÏÀÌ ¾ø´Ù¸é, 
+			            fileCheck.mkdirs(); //»óÀ§ µğ·ºÅä¸® ¸¸µé¾îÁÖ±â
 			         List<Map<String, String>> fileList = new ArrayList<>();
-			         if(multiFileList == null || multiFileList.get(0).getOriginalFilename().equals("")) {
+			         if(multiFileList == null || multiFileList.get(0).getOriginalFilename().equals("")) { // writeform¿¡¼­ ´ÙÁßÆÄÀÏ ´ã¾Æ¼­ ¸Å°³º¯¼ö·Î ¹Ş¾Æ¿È.
+			        	 // ¸¸¾à ÆÄÀÏ ¾øÀ¸¸é ±×³É °Ô½Ã±Û µî·Ï
 			        	 if(mode.equals("anony")) {
-			 				req.setAttribute("msg", "ê²Œì‹œê¸€ ë“±ë¡ ì„±ê³µ");
+			 				req.setAttribute("msg", "°Ô½Ã±Û µî·Ï ¼º°ø");
 			 				req.setAttribute("url", "board_anony.do?mode=anony");
 			 			}else {
-			 			req.setAttribute("msg", "ê²Œì‹œê¸€ ë“±ë¡ ì„±ê³µ");
+			 			req.setAttribute("msg", "°Ô½Ã±Û µî·Ï ¼º°ø");
 			 			req.setAttribute("url", "board_free.do?mode=");
 			             return "message";
 			 			}
-			         }else {
-			         for (int i = 0; i < multiFileList.size(); i++) {
+			         }else { // ¸¸¾à ÆÄÀÏÀÌ ÀÖ´Ù¸é 
+			         for (int i = 0; i < multiFileList.size(); i++) { //for¹®À¸·Î ÆÄÀÏ ÀÌ¸§ ¹Ş¾Æ¿À±â, »çÀÌÁî ¹Ş¾Æ¿À±â
 			            String originFile = multiFileList.get(i).getOriginalFilename();
 			            int filesize = (int) multiFileList.get(i).getSize();
-			            String ext = originFile.substring(originFile.lastIndexOf("."));
-			            String changeFile = UUID.randomUUID().toString() + ext;
-			            fdto.setFilename(originFile);
-			            fdto.setSavename(changeFile);
+			            String ext = originFile.substring(originFile.lastIndexOf(".")); //¿ø·¡ÀÌ¸§ È®ÀåÀÚ ¾Õ¿¡¼­ ÀÚ¸£±â 
+			            String changeFile = UUID.randomUUID().toString() + ext;// ¿ø·¡ÀÌ¸§¿¡ »õ·Î¿î ·£´ıÀÌ¸§ ºÙ¿©ÁÖ±â
+			            fdto.setFilename(originFile); //¿ø·¡ ÆÄÀÏÀÌ¸§
+			            fdto.setSavename(changeFile);//db¿¡ ÀúÀåµÉ »õ·Î¿î ÆÄÀÏÀÌ¸§ 
 			            fdto.setFilesize(filesize);
-			            int board_num = boardMapper.maxRe_group(); // ìµœì‹ ê¸€ë²ˆí˜¸ ê°€ì ¸ì˜¤ê¸°
+			            int board_num = boardMapper.maxRe_group(); // ÃÖ½Å±Û¹øÈ£ °¡Á®¿À±â (¹æ±İ µî·ÏÃ³¸®µÈ  ±Û)
 			          	fdto.setBoard_num(board_num);
 			            int res2 = boardMapper.fileInsert(fdto);
 			            Map<String, String> map = new HashMap<>();
@@ -331,50 +343,51 @@ public class BoardController {
 			            fileList.add(map);
 			         }
 			        }
-			         // íŒŒì¼ ì—…ë¡œë“œ
+			         // ÆÄÀÏ ¾÷·Îµå
 			         try {
 			        	 if (fileList.size()!=0) {
 			            for (int i = 0; i < multiFileList.size(); i++) {
 			               File uploadFile = new File(upPath1 + "\\" + fileList.get(i).get("savename"));
-			               multiFileList.get(i).transferTo(uploadFile);
+			               multiFileList.get(i).transferTo(uploadFile); //i¹øÂ° ÆÄÀÏ ²¨³½´ÙÀ½¿¡ ¾÷·Îµå ÇØÁÖ±â.
 			            }
 			        	 }
-			            System.out.println("ë‹¤ì¤‘ íŒŒì¼ ì—…ë¡œë“œ ì„±ê³µ");
+			            System.out.println("´ÙÁß ÆÄÀÏ ¾÷·Îµå ¼º°ø");
 			         } catch (IllegalStateException | IOException e) {
-			            System.out.println("ë‹¤ì¤‘íŒŒì¼ ì—…ë¡œë“œ ì‹¤íŒ¨ ã… ã… ");
+			            System.out.println("´ÙÁßÆÄÀÏ ¾÷·Îµå ½ÇÆĞ ¤Ğ¤Ğ");
 			            for (int i = 0; i < multiFileList.size(); i++) {
 			               new File(upPath1 + "\\" + fileList.get(i).get("savename")).delete();
+			               //À§¿¡¼­ ¸¸µé¾îÁØ ÀúÀå¸í Áö¿öÁÖ±â
 			            }
 			            e.printStackTrace();
 			         }
 				if(mode.equals("anony")) {
-					req.setAttribute("msg", "ê²Œì‹œê¸€ ë“±ë¡ ì„±ê³µ");
+					req.setAttribute("msg", "°Ô½Ã±Û µî·Ï ¼º°ø");
 					req.setAttribute("url", "board_anony.do?mode=anony");
 				}else {
-				req.setAttribute("msg", "ê²Œì‹œê¸€ ë“±ë¡ ì„±ê³µ");
+				req.setAttribute("msg", "°Ô½Ã±Û µî·Ï ¼º°ø");
 				req.setAttribute("url", "board_free.do?mode=");
 				}
 			}else {
-				req.setAttribute("msg", "ê²Œì‹œê¸€ ë“±ë¡ ì‹¤íŒ¨");
+				req.setAttribute("msg", "°Ô½Ã±Û µî·Ï ½ÇÆĞ");
 				req.setAttribute("url", "write_board.do");
 			}
 			return "message";
 		}
 		
 		
-	//íŒŒì¼ ë‹¤ìš´ë¡œë“œ ì²˜ë¦¬
+	//ÆÄÀÏ ´Ù¿î·Îµå Ã³¸®
 	@RequestMapping("/file_download.do")
 	public ModelAndView fileDown(HttpServletRequest req,HttpServletResponse resp,@RequestParam int board_num) {
 		ModelAndView mav = new ModelAndView("message"); 
 		List<BoardFilesDTO> list = boardMapper.getFiles(board_num);
 		 
 		HttpSession session=req.getSession();
-		//ë¡œê·¸ì¸ ì²´í¬ 
+		//·Î±×ÀÎ Ã¼Å© 
 			MemberDTO mdto = (MemberDTO)session.getAttribute("login_mem");
-			if(mdto == null) {
-				session.invalidate();
+			if(mdto == null) { // ·Î±×ÀÎ µÇ¾îÀÖ´ÂÁö Ã¼Å©
+				session.invalidate(); 
 				mav.setViewName("message_back");
-				mav.addObject("msg","ë¡œê·¸ì¸ í•´ì£¼ì„¸ìš”" );
+				mav.addObject("msg","·Î±×ÀÎ ÇØÁÖ¼¼¿ä" );
 				return mav;
 			}
 		String upPath1 = session.getServletContext().getRealPath("/resources/files");
@@ -386,22 +399,23 @@ public class BoardController {
 		            String original_name = null;
 		            String save_name = null;
 		      
-		            for(BoardFilesDTO fdto : list) {
+		            for(BoardFilesDTO fdto : list) { // °°Àº ÀÌ¸§ÀÇ ÆÄÀÏÀÌ ÀÖ´ÂÁö È®ÀÎ
 		               if(fdto.getFilename().equals(name)){
 		                  original_name = fdto.getFilename();
 		                  save_name = fdto.getSavename();
 		               }
 		            }
-		            original_name = new String(original_name.getBytes("UTF-8"), "iso-8859-1");
+		            //ÆÄÀÏ ´Ù¿î·Îµå ºÎºĞÀº Àúµµ Á¶±İ ´õ °øºÎÇÏ°í ÁÖ¼® ´Ş°Ô¿ä .. 
+		            original_name = new String(original_name.getBytes("UTF-8"), "iso-8859-1"); 
 		            File file = new File(session.getServletContext().getRealPath("/resources/files/"+save_name));
-		            FileInputStream fis = new FileInputStream(file);
+		            FileInputStream fis = new FileInputStream(file); // ÆÄÀÏ ÀĞ±â 
 		               ServletOutputStream sos = resp.getOutputStream();
 		               
 		               resp.setContentType("application/octet-stream");
 		               resp.setContentLength((int) file.length());
 		               resp.setHeader("Content-Disposition", "attachment;filename=\""+ original_name +"\"");
 		         
-		               byte[] buffer = new byte[4096];
+		               byte[] buffer = new byte[4096]; 
 		               int bytesRead;
 		               while ((bytesRead = fis.read(buffer)) != -1) {
 		                   sos.write(buffer, 0, bytesRead);
@@ -413,9 +427,9 @@ public class BoardController {
 		         }
 			 return mav;
 	}
-	//ê³µì§€ì‚¬í•­ ìƒì„¸ë³´ê¸°
+	//°øÁö»çÇ× »ó¼¼º¸±â
 	
-	@RequestMapping("/board_noti_content.do")
+	@RequestMapping("/board_noti_content.do") 
 	public ModelAndView boardNotiContent(HttpServletRequest req,@RequestParam int n_num,@RequestParam String mode) {
 		ModelAndView mav = new ModelAndView("/board/content_noti");
 		NoticeDTO dto = boardMapper.getNotice(n_num);
@@ -427,18 +441,18 @@ public class BoardController {
 		return mav;
 	}
 	
-	//ììœ , ìµëª… ê²Œì‹œê¸€ ìƒì„¸ë³´ê¸°
+	//ÀÚÀ¯, ÀÍ¸í °Ô½Ã±Û »ó¼¼º¸±â
 	@RequestMapping("/content_board.do")
 	public ModelAndView getBoard(HttpServletRequest req, @RequestParam int board_num, @RequestParam int pageNum, @RequestParam(required = false) Map<String,Integer> params) throws IOException {
 
 		HttpSession session = req.getSession();
 		ModelAndView mav = new ModelAndView("/board/content");
-		//ë¡œê·¸ì¸ ì²´í¬ 
+		//·Î±×ÀÎ Ã¼Å© 
 			MemberDTO mdto = (MemberDTO)session.getAttribute("login_mem");
 			if(mdto == null) {
 				session.invalidate();
 				mav.setViewName("message_back");
-				mav.addObject("msg","ë¡œê·¸ì¸ í•´ì£¼ì„¸ìš”" );
+				mav.addObject("msg","·Î±×ÀÎ ÇØÁÖ¼¼¿ä" );
 				return mav;
 			}
 		String upPath = session.getServletContext().getRealPath("/resources/img");
@@ -447,12 +461,13 @@ public class BoardController {
 		
 		String mode = req.getParameter("mode");
 		mav.addObject("mode",mode);
-		//íŒŒì¼ë¦¬ìŠ¤íŠ¸ ë½‘ê¸°
+		//ÆÄÀÏ¸®½ºÆ® »Ì±â
 		 List<BoardFilesDTO> flist = boardMapper.getFiles(board_num);
 		 mav.addObject("listFile", flist);
 		
-		// ì—¬ê¸°ë¶€í„° ìŠ¹ë¯¸ê°€ ë§Œì§ (ë§¤ê°œë³€ìˆ˜ int board_num -> Map<String, Integer> params ë¡œ ë°”ê¿ˆ
-		int pageSize = 10;
+		// ¿©±âºÎÅÍ ½Â¹Ì°¡ ¸¸Áü (¸Å°³º¯¼ö int board_num -> Map<String, Integer> params ·Î ¹Ù²Ş
+		// ´ñ±Û ¸ñ·Ï ÆäÀÌÁö ¼ö 
+		 int pageSize = 10;
 		if (pageNum == 0) {
 			pageNum = 1;
 		}
@@ -493,7 +508,8 @@ public class BoardController {
 		return mav;
 	
 	}
-	//ê²Œì‹¯ê¸€, ëŒ“ê¸€ ì‹ ê³  ì°½ ë„ìš°ê¸°
+	//°Ô½Ë±Û, ´ñ±Û ½Å°í Ã¢ ¶ç¿ì±â
+	//Àú´Â ÀÌ ¸ÅÇÎÁÖ¼Ò¿¡¼­ ÀÚÀ¯,ÀÍ¸í,Áß°í °Ô½ÃÆÇÀÇ °Ô½Ã±Û ´ñ±ÛÀÇ ½Å°íÃ¢À» ´Ù ¶ç¿ü½À´Ï´Ù.
 	@RequestMapping("/report_board.do")
 		public ModelAndView reportBoard(HttpServletRequest req,String mode) {
 			ModelAndView mav = new ModelAndView("message");
@@ -510,7 +526,7 @@ public class BoardController {
 					mav.setViewName("board/reportForm");
 						return mav;
 	}
-	//ìµëª…, ììœ  ê²Œì‹œê¸€ , ëŒ“ê¸€ ì‹ ê³  ë„˜ê¸°ê¸°
+	//ÀÍ¸í, ÀÚÀ¯ °Ô½Ã±Û , ´ñ±Û ½Å°í ³Ñ±â±â
 	@RequestMapping(value="/report_board.do", method = RequestMethod.POST)
 	public ModelAndView reportBoardPro(HttpServletRequest req,String mode, @ModelAttribute ReportDTO dto, BindingResult result) {
 		ModelAndView mav = new ModelAndView("closeWindow");
@@ -523,95 +539,96 @@ public class BoardController {
 		if(mode.equals("board")) {
 			int board_num = Integer.parseInt(req.getParameter("board_num"));
 			dto.setReport_target(board_num);
-			dto.setReport_mode("ììœ ,ìµëª…ê²Œì‹œê¸€");
+			dto.setReport_mode("ÀÚÀ¯,ÀÍ¸í°Ô½Ã±Û");
 			boardMapper.report(dto);
 			int res = boardMapper.reportBoard(board_num);
 				if (res > 0) {
-					mav.addObject("msg", "ì‹ ê³ ë˜ì—ˆìŠµë‹ˆë‹¤.");
+					mav.addObject("msg", "½Å°íµÇ¾ú½À´Ï´Ù.");
 				} else {
-					mav.addObject("msg", "ì‹ ê³  ì‹¤íŒ¨, ê´€ë¦¬ìì—ê²Œ ë¬¸ì˜í•´ ì£¼ì„¸ìš”");
+					mav.addObject("msg", "½Å°í ½ÇÆĞ, °ü¸®ÀÚ¿¡°Ô ¹®ÀÇÇØ ÁÖ¼¼¿ä");
 				}
 				
 		}else if(mode.equals("sh_board")) {
 			int board_num = Integer.parseInt(req.getParameter("board_num"));
-			dto.setReport_mode("ì¤‘ê³ ê²Œì‹œê¸€");
+			dto.setReport_mode("Áß°í°Ô½Ã±Û");
 			dto.setReport_target(board_num);
 			boardMapper.report(dto);
 			int res = boardMapper.reportBoard_sh(board_num);
 			if (res > 0) {
-				mav.addObject("msg", "ì‹ ê³ ë˜ì—ˆìŠµë‹ˆë‹¤.");
+				mav.addObject("msg", "½Å°íµÇ¾ú½À´Ï´Ù.");
 			} else {
-				mav.addObject("msg", "ì‹ ê³  ì‹¤íŒ¨, ê´€ë¦¬ìì—ê²Œ ë¬¸ì˜í•´ ì£¼ì„¸ìš”");
+				mav.addObject("msg", "½Å°í ½ÇÆĞ, °ü¸®ÀÚ¿¡°Ô ¹®ÀÇÇØ ÁÖ¼¼¿ä");
 			}
 			
 		}else if(mode.equals("sh_reply")) {
 			int br_num = Integer.parseInt(req.getParameter("br_num"));
-			dto.setReport_mode("ì¤‘ê³ ëŒ“ê¸€");
+			dto.setReport_mode("Áß°í´ñ±Û");
 			dto.setReport_target(br_num);
 			boardMapper.report(dto);
 			int res = boardMapper.reportReply_sh(br_num);
 			if (res > 0) {
-				mav.addObject("msg", "ì‹ ê³ ë˜ì—ˆìŠµë‹ˆë‹¤.");
+				mav.addObject("msg", "½Å°íµÇ¾ú½À´Ï´Ù.");
 			} else {
-				mav.addObject("msg", "ì‹ ê³  ì‹¤íŒ¨, ê´€ë¦¬ìì—ê²Œ ë¬¸ì˜í•´ ì£¼ì„¸ìš”");
+				mav.addObject("msg", "½Å°í ½ÇÆĞ, °ü¸®ÀÚ¿¡°Ô ¹®ÀÇÇØ ÁÖ¼¼¿ä");
 			}
 			
 		}else if(mode.equals("reply")) {
 			int br_num = Integer.parseInt(req.getParameter("br_num"));
-			dto.setReport_mode("ììœ ,ìµëª…ëŒ“ê¸€");
+			dto.setReport_mode("ÀÚÀ¯,ÀÍ¸í´ñ±Û");
 			dto.setReport_target(br_num);
 			boardMapper.report(dto);
 			int res = boardMapper.reportReply(br_num);
 				if (res > 0) {
-					mav.addObject("msg", "ì‹ ê³ ë˜ì—ˆìŠµë‹ˆë‹¤.");
+					mav.addObject("msg", "½Å°íµÇ¾ú½À´Ï´Ù.");
 				} else {
-					mav.addObject("msg", "ì‹ ê³  ì‹¤íŒ¨, ê´€ë¦¬ìì—ê²Œ ë¬¸ì˜í•´ ì£¼ì„¸ìš”");
+					mav.addObject("msg", "½Å°í ½ÇÆĞ, °ü¸®ÀÚ¿¡°Ô ¹®ÀÇÇØ ÁÖ¼¼¿ä");
 				}
 		}
 		return mav;
 	}
 
-	//ëŒ“ê¸€ ì‚­ì œ
+	//´ñ±Û »èÁ¦
 		@RequestMapping("/delete_reply.do")
 		public ModelAndView deleteReply(HttpServletRequest req, int board_num,int br_num, int pageNum) {
 			ModelAndView mav = new ModelAndView("message");
-			//ë¡œê·¸ì¸ ì²´í¬ 
+			//·Î±×ÀÎ Ã¼Å© 
 			HttpSession session= req.getSession();
 				MemberDTO mdto = (MemberDTO)session.getAttribute("login_mem");
 				if(mdto == null) {
 					session.invalidate();
 					mav.setViewName("message_back");
-					mav.addObject("msg","ë¡œê·¸ì¸ í•´ì£¼ì„¸ìš”" );
+					mav.addObject("msg","·Î±×ÀÎ ÇØÁÖ¼¼¿ä" );
 					return mav;
 				}
 			int res = boardMapper.deleteReply(br_num);
 			if (res > 0) {
-				mav.addObject("msg", "ì‚­ì œ ì„±ê³µ! ");
+				mav.addObject("msg", "»èÁ¦ ¼º°ø! ");
 				mav.addObject("url",  "content_board.do?board_num="+board_num+"&pageNum="+pageNum);
 			} else {
-				mav.addObject("msg", "ì‚­ì œ ì‹¤íŒ¨!");
+				mav.addObject("msg", "»èÁ¦ ½ÇÆĞ!");
 				mav.addObject("url",  "content_board.do?board_num="+board_num+"&pageNum="+pageNum);
 			}
 
 			return mav;
 		}
 	
-	//ëŒ“ê¸€ ì…ë ¥
+	//´ñ±Û ÀÔ·Â
 	@RequestMapping(value = "/write_reply.do")
 	public ModelAndView writeReply(HttpServletRequest req, @ModelAttribute Board_replyDTO dto, BindingResult result) {
 		
 		int re_group = 0, re_step = 0, re_level = 0;
 		
 		ModelAndView mav = new ModelAndView("message");
-		//ë¡œê·¸ì¸ ì²´í¬ 
+		//·Î±×ÀÎ Ã¼Å© 
 		HttpSession session= req.getSession();
 			MemberDTO mdto = (MemberDTO)session.getAttribute("login_mem");
 			if(mdto == null) {
 				session.invalidate();
 				mav.setViewName("message_back");
-				mav.addObject("msg","ë¡œê·¸ì¸ í•´ì£¼ì„¸ìš”" );
+				mav.addObject("msg","·Î±×ÀÎ ÇØÁÖ¼¼¿ä" );
 				return mav;
 			}
+			//ÇØ´ç °Ô½Ã±Û ¹øÈ£¶û ´ñ±Û ¹øÈ£¸¦ ¹Ş¾Æ¿É´Ï´Ù.
 			int board_num = dto.getBoard_num();
 			int br_num = dto.getBr_num();
 			dto.setBoard_num(board_num);
@@ -619,7 +636,7 @@ public class BoardController {
 			dto.setMem_num(dto3.getMem_num());
 			dto.setMem_nickname(dto3.getMem_nickname());
 			
-			//ëŒ€ëŒ“ê¸€ì¼ë•Œ
+			//´ë´ñ±ÛÀÏ¶§
 			if(br_num>0) {
 				re_group =dto.getBr_re_group();
 				re_step=dto.getBr_re_step();
@@ -635,11 +652,11 @@ public class BoardController {
 			
 			int res = boardMapper.insertReply(dto);
 			if (res > 0) {
-				mav.addObject("msg", "ëŒ“ê¸€ì´ ë“±ë¡ ë˜ì—ˆìŠµë‹ˆë‹¤.");
+				mav.addObject("msg", "´ñ±ÛÀÌ µî·Ï µÇ¾ú½À´Ï´Ù.");
 				mav.addObject("url", "content_board.do?pageNum=1&board_num="+board_num);
 				
 			    
-				//ëŒ“ê¸€ ì•ŒëŒ@@#@#@#@#@#
+				//´ñ±Û ¾Ë¶÷@@#@#@#@#@#
 				MemberDTO dto5 = (MemberDTO)session.getAttribute("login_mem");
 				int memNum = alarmMapper.BoardNum(board_num);
 				if(dto5.getMem_num()!=memNum) {
@@ -648,31 +665,32 @@ public class BoardController {
 				
 				AlarmDTO rm = new AlarmDTO();
 				rm.setMem_num(memNum);
-				rm.setAlm_cate("ëŒ“ê¸€");
-				rm.setAlm_content(""+title+""+"ê²Œì‹œê¸€ì— ìƒˆë¡œìš´ ëŒ“ê¸€ì´ ì¶”ê°€ë˜ì—ˆìŠµë‹ˆë‹¤!");
-				rm.setAlm_title("ëŒ“ê¸€ ìƒˆì†Œì‹");
+				rm.setAlm_cate("´ñ±Û");
+				rm.setAlm_content(""+title+""+"°Ô½Ã±Û¿¡ »õ·Î¿î ´ñ±ÛÀÌ Ãß°¡µÇ¾ú½À´Ï´Ù!");
+				rm.setAlm_title("´ñ±Û »õ¼Ò½Ä");
 
 				alarmMapper.addBoardAlarm(rm);
 				}
 				
 			} else {
-				mav.addObject("msg", "ëŒ“ê¸€ ë“±ë¡ ì‹¤íŒ¨");
+				mav.addObject("msg", "´ñ±Û µî·Ï ½ÇÆĞ");
 				mav.addObject("url", "content_board.do?board_num"+board_num);
 			}
 			return mav;
 		}
-//ììœ ,ìµëª… ëŒ€ëŒ“ê¸€
+//ÀÚÀ¯,ÀÍ¸í ´ë´ñ±Û
+	//ÀÌ ºÎºĞÀº ajax·Î ÇØ´ç ´ñ±Û ¹Ø¿¡ ¹Ù·Î ÀÛ¼º formÀ» ¶ç¿ì´Â ÀÛ¾÷ÀÔ´Ï´Ù.
 	@ResponseBody
 	@RequestMapping("/re_reply.do")
 	public ModelAndView re_reply(HttpServletRequest req,int br_num,int pageNum,int board_num) {
 		ModelAndView mav = new ModelAndView("/board/Re_replyForm");
-		//ë¡œê·¸ì¸ ì²´í¬ 
+		//·Î±×ÀÎ Ã¼Å© 
 		HttpSession session= req.getSession();
 			MemberDTO mdto = (MemberDTO)session.getAttribute("login_mem");
 			if(mdto == null) {
 				session.invalidate();
 				mav.setViewName("message_back");
-				mav.addObject("msg","ë¡œê·¸ì¸ í•´ì£¼ì„¸ìš”" );
+				mav.addObject("msg","·Î±×ÀÎ ÇØÁÖ¼¼¿ä" );
 				return mav;
 			}
 		Board_replyDTO dto = boardMapper.getReply(br_num);
@@ -687,20 +705,20 @@ public class BoardController {
 		
 		return mav;
 	}
-	//ììœ , ìµëª… ëŒ“ê¸€ ìˆ˜ì •
+	//ÀÚÀ¯, ÀÍ¸í ´ñ±Û ¼öÁ¤
 	@RequestMapping(value="/update_reply.do", method = RequestMethod.GET)
 	public ModelAndView updateReply(HttpServletRequest req,int br_num,int pageNum) {
 		ModelAndView mav = new ModelAndView("/board/updateReplyForm");
-		//ë¡œê·¸ì¸ ì²´í¬ 
+		//·Î±×ÀÎ Ã¼Å© 
 		HttpSession session= req.getSession();
 			MemberDTO mdto = (MemberDTO)session.getAttribute("login_mem");
 			if(mdto == null) {
 				session.invalidate();
 				mav.setViewName("message_back");
-				mav.addObject("msg","ë¡œê·¸ì¸ í•´ì£¼ì„¸ìš”" );
+				mav.addObject("msg","·Î±×ÀÎ ÇØÁÖ¼¼¿ä" );
 				return mav;
 			}
-		Board_replyDTO dto = boardMapper.getReply(br_num);
+		Board_replyDTO dto = boardMapper.getReply(br_num); // ¼öÁ¤ÇÒ ´ñ±Û Á¤º¸ °¡Á®¿À±â
 		mav.addObject("dto",dto);
 		mav.addObject("br_num",br_num);
 		mav.addObject("pageNum", pageNum);
@@ -710,37 +728,37 @@ public class BoardController {
 	@RequestMapping(value="/update_replyOk.do")
 	public ModelAndView updateReplyPro(HttpServletRequest req, @RequestParam Map<Object, Object> params) {
 		ModelAndView mav = new ModelAndView();
-		//ë¡œê·¸ì¸ ì²´í¬ 
+		//·Î±×ÀÎ Ã¼Å© 
 		HttpSession session= req.getSession();
 			MemberDTO mdto = (MemberDTO)session.getAttribute("login_mem");
 			if(mdto == null) {
 				session.invalidate();
 				mav.setViewName("message_back");
-				mav.addObject("msg","ë¡œê·¸ì¸ í•´ì£¼ì„¸ìš”" );
+				mav.addObject("msg","·Î±×ÀÎ ÇØÁÖ¼¼¿ä" );
 				return mav;
 			}
-		String br_num = (String)params.get("br_num");
+		String br_num = (String)params.get("br_num"); //´ñ±Û ¹øÈ£¸¦ °¡Á®¿Â ÈÄ 
 		Board_replyDTO dto = boardMapper.getReply(Integer.parseInt(br_num));
 		//String pageNum = (String)params.get
-		dto.setBr_content((String)params.get("br_content"));
+		dto.setBr_content((String)params.get("br_content")); // ¼öÁ¤ÇÑ ³»¿ë set ÇØÁİ´Ï´Ù.
 		boardMapper.updateReply(dto);
 		
 		return mav;
 	}
 	
 
-	//ê²Œì‹œê¸€ ì‚­ì œ
+	//°Ô½Ã±Û »èÁ¦
 	@RequestMapping("/delete_board.do")
 	public ModelAndView deleteBoard(HttpServletRequest req,
 			@RequestParam(required = false) Map<String, String> params) {
 		ModelAndView mav = new ModelAndView("message");
-		//ë¡œê·¸ì¸ ì²´í¬ 
+		//·Î±×ÀÎ Ã¼Å© 
 		HttpSession session= req.getSession();
 			MemberDTO mdto = (MemberDTO)session.getAttribute("login_mem");
 			if(mdto == null) {
 				session.invalidate();
 				mav.setViewName("message_back");
-				mav.addObject("msg","ë¡œê·¸ì¸ í•´ì£¼ì„¸ìš”" );
+				mav.addObject("msg","·Î±×ÀÎ ÇØÁÖ¼¼¿ä" );
 				return mav;
 			}
 		int board_num = Integer.parseInt(params.get("board_num"));
@@ -755,7 +773,7 @@ public class BoardController {
 		if (res > 0) {
 			String upPath = (String) session.getAttribute("upPath");
 
-			File file1 = new File(upPath, board_img1);
+			File file1 = new File(upPath, board_img1); // ÀÌ¹ÌÁö¶û ÆÄÀÏ ½Ï´Ù Áö¿öÁİ´Ï´Ù.
 			File file2 = new File(upPath, board_img2);
 			File file3 = new File(upPath, board_img3);
 			File file4 = new File(upPath, board_img4);
@@ -766,7 +784,7 @@ public class BoardController {
 				file3.delete();
 				file4.delete();
 			}
-			//íŒŒì¼ë¦¬ìŠ¤íŠ¸ ë½‘ê¸°
+			//ÆÄÀÏ¸®½ºÆ® »Ì±â
 			 List<BoardFilesDTO> flist = boardMapper.getFiles(board_num);
 			 String filename = req.getParameter("filename");
 				String upPath1 = (String) session.getAttribute("upPath1");
@@ -781,9 +799,9 @@ public class BoardController {
 			               }
 			            }
 			}
-				 mav.addObject("msg", "ê¸€ ì‚­ì œ ì„±ê³µ");
+				 mav.addObject("msg", "±Û »èÁ¦ ¼º°ø");
 		} else {
-			mav.addObject("msg", "ì‚­ì œ ì‹¤íŒ¨");
+			mav.addObject("msg", "»èÁ¦ ½ÇÆĞ");
 			mav.addObject("url", "board_free.do?mode="+params.get("mode"));
 		}
 		mav.addObject("url", "board_free.do?mode="+params.get("mode"));
@@ -791,7 +809,7 @@ public class BoardController {
 	}
 	
 	
-	//ê²Œì‹œê¸€ ìˆ˜ì •ë²„íŠ¼ í´ë¦­ì‹œ
+	//°Ô½Ã±Û ¼öÁ¤¹öÆ° Å¬¸¯½Ã
 	@RequestMapping(value = "/update_board.do", method = RequestMethod.GET)
 	public ModelAndView updateBoard(HttpServletRequest req, int board_num, String mode) {
 		BoardDTO dto = boardMapper.getBoard(board_num, "update");
@@ -803,18 +821,18 @@ public class BoardController {
 		mav.setViewName("board/updateForm");
 		return mav;
 	}
-	//ê²Œì‹œê¸€ ìˆ˜ì • ì²˜ë¦¬
+	//°Ô½Ã±Û ¼öÁ¤ Ã³¸®
 	@RequestMapping(value = "/update_board.do", method = RequestMethod.POST)
 	public ModelAndView updateOkBoard(HttpServletRequest req,@RequestParam("filename") List<MultipartFile> multiFileList, @ModelAttribute BoardDTO dto, BindingResult result)
 			throws IllegalStateException, IOException {
 		ModelAndView mav = new ModelAndView("message");
-		//ë¡œê·¸ì¸ ì²´í¬ 
+		//·Î±×ÀÎ Ã¼Å© 
 		HttpSession session= req.getSession();
 			MemberDTO mdto = (MemberDTO)session.getAttribute("login_mem");
 			if(mdto == null) {
 				session.invalidate();
 				mav.setViewName("message");
-				mav.addObject("msg","ë¡œê·¸ì¸ í•´ì£¼ì„¸ìš”" );
+				mav.addObject("msg","·Î±×ÀÎ ÇØÁÖ¼¼¿ä" );
 				mav.addObject("url","login.do" );
 				return mav;
 			}
@@ -832,25 +850,24 @@ public class BoardController {
 		String board_img2 = mf2.getOriginalFilename();
 		String board_img3 = mf3.getOriginalFilename();
 		String board_img4 = mf4.getOriginalFilename();
-		String filename = mf5.getOriginalFilename();
 		
 		String upPath = session.getServletContext().getRealPath("/resources/img");
 		String upPath1 = session.getServletContext().getRealPath("/resources/files");
 		
 		UUID uuid = UUID.randomUUID();
 
-		if (!mf1.isEmpty()) { // ì´ë¯¸ ì´ë¯¸ì§€ê°€ ìˆê³ , ìˆ˜ì •í•  ì‹œ
+		if (!mf1.isEmpty()) { // ÀÌ¹Ì ÀÌ¹ÌÁö°¡ ÀÖ°í, ¼öÁ¤ÇÒ ½Ã
 			board_img1 = uuid.toString() + "_" + board_img1;
 			File file1 = new File(upPath, board_img1);
 			mf1.transferTo(file1);
 			
 			File file11 = new File(upPath, req.getParameter("board_img1-2"));
-			if(file11.exists()) { // ì´ë¯¸ íŒŒì¼ì´ ì¡´ì¬í•œë‹¤ë©´ ì‚­ì œ
+			if(file11.exists()) { // ÀÌ¹Ì ÆÄÀÏÀÌ Á¸ÀçÇÑ´Ù¸é »èÁ¦
 				file11.delete();
 			}
-			dto.setBoard_img1(board_img1); // ìƒˆë¡œìš´ ì´ë¯¸ì§€ dtoì— ë„£ì–´ì£¼ê¸°
+			dto.setBoard_img1(board_img1); // »õ·Î¿î ÀÌ¹ÌÁö dto¿¡ ³Ö¾îÁÖ±â
 			
-		} else if (mf1.isEmpty()) { // ì´ë¯¸ì§€ ì²¨ë¶€ê°€ ì•ˆë˜ì–´ ìˆê³  ìˆ˜ì •í• ë•Œ ì²¨ë¶€
+		} else if (mf1.isEmpty()) { // ÀÌ¹ÌÁö Ã·ºÎ°¡ ¾ÈµÇ¾î ÀÖ°í ¼öÁ¤ÇÒ¶§ Ã·ºÎ
 			dto.setBoard_img1(req.getParameter("board_img1-2"));
 		}
 
@@ -902,16 +919,18 @@ public class BoardController {
 		} else if (mf4.isEmpty()) {
 			dto.setBoard_img4(req.getParameter("board_img4-2"));
 		}
+
 		BoardFilesDTO dto2 = new BoardFilesDTO();
 		String mode = req.getParameter("mode");
 		int res = boardMapper.updateBoard(dto);
 		if (res > 0) {
+			// ÆÄÀÏ ¾÷´Ù¿î·Îµå ¼öÁ¤
 			 File fileCheck = new File(upPath1);
 	         if (!fileCheck.exists())
 	            fileCheck.mkdirs();
 	         List<Map<String, String>> fileList = new ArrayList<>();
 	         if(multiFileList == null || multiFileList.get(0).getOriginalFilename().equals("")) {
-	        	 mav.addObject("msg", "ìˆ˜ì •ì„±ê³µ! ");
+	        	 mav.addObject("msg", "¼öÁ¤¼º°ø! ");
 	        		if(mode.equals("anony")) {
 	 			mav.addObject("url", "content_board.do?board_num="+board_num+"&pageNum=1&mode=anony");
 	        		}else {
@@ -926,8 +945,8 @@ public class BoardController {
 	               File file2 = new File(upPath1 + "\\" + fdto.getSavename());
 	               if(file2.exists()) file2.delete();
 	               else {
-	            		mav.addObject("msg", "ìˆ˜ì •ì‹¤íŒ¨!");
-	            		 mav.addObject("msg", "ìˆ˜ì •ì„±ê³µ! ");
+	            		mav.addObject("msg", "¼öÁ¤½ÇÆĞ!");
+	            		 mav.addObject("msg", "¼öÁ¤¼º°ø! ");
 	 	        		if(mode.equals("anony")) {
 	 	        			mav.addObject("url", "content_board.do?board_num="+board_num+"&pageNum=1&mode=anony");
 	 	        		}else {
@@ -936,6 +955,7 @@ public class BoardController {
 	               }
 	            }
 	         }
+	         //¼öÁ¤ ÇÒ ¶§ »õ·Î¿î ÆÄÀÏ Ãß°¡½Ã.
 	         for (int i = 0; i < multiFileList.size(); i++) {
 	            String originFile = multiFileList.get(i).getOriginalFilename();
 	            int filesize = (int) multiFileList.get(i).getSize();
@@ -953,22 +973,22 @@ public class BoardController {
 
 	            fileList.add(map);
 	         }
-	         // íŒŒì¼ ì—…ë¡œë“œ
+	         // ÆÄÀÏ ¾÷·Îµå
 	         try {
 	            for (int i = 0; i < multiFileList.size(); i++) {
 	               File uploadFile = new File(upPath1 + "\\" + fileList.get(i).get("savename"));
 	               multiFileList.get(i).transferTo(uploadFile);
 	            }
-	            System.out.println("ë‹¤ì¤‘ íŒŒì¼ ì—…ë¡œë“œ ì„±ê³µ");
+	            System.out.println("´ÙÁß ÆÄÀÏ ¾÷·Îµå ¼º°ø");
 	         } catch (IllegalStateException | IOException e) {
-	            System.out.println("ë‹¤ì¤‘íŒŒì¼ ì—…ë¡œë“œ ì‹¤íŒ¨ ã… ã… ");
+	            System.out.println("´ÙÁßÆÄÀÏ ¾÷·Îµå ½ÇÆĞ ¤Ğ¤Ğ");
 	            for (int i = 0; i < multiFileList.size(); i++) {
 	               new File(upPath1 + "\\" + fileList.get(i).get("savename")).delete();
 	            }
 	            e.printStackTrace();
 	         }
-			mav.addObject("msg", "ìˆ˜ì •ì„±ê³µ! ");
-			 mav.addObject("msg", "ìˆ˜ì •ì„±ê³µ! ");
+			mav.addObject("msg", "¼öÁ¤¼º°ø! ");
+			 mav.addObject("msg", "¼öÁ¤¼º°ø! ");
      		if(mode.equals("anony")) {
 			mav.addObject("url", "content_board.do?board_num="+board_num+"&pageNum=1&mode=anony");
      		}else {
@@ -976,17 +996,19 @@ public class BoardController {
      		}
 			mav.addObject("getBoard", dto);
 		} else {
-			mav.addObject("msg", "ìˆ˜ì •ì‹¤íŒ¨!");
+			mav.addObject("msg", "¼öÁ¤½ÇÆĞ!");
 			mav.addObject("url", "content_board.do?board_num="+board_num+"&pageNum=1&mode="+req.getParameter("mode"));
 		}
 		return mav;
 	}
 	
-	//ììœ ê²Œì‹œíŒ ê²€ìƒ‰
+	//ÀÚÀ¯°Ô½ÃÆÇ °Ë»ö
 	@RequestMapping("board_free_find.do")
 	public ModelAndView freeFind(HttpServletRequest req, @RequestParam java.util.Map<String,Object> params) {
 		ModelAndView mav = new ModelAndView("board/list_free");
-			String select = (String) params.get("select");
+			
+		// select ¹®¿¡¼­ ¹Ş¾Æ¿Â °ªÀ» ÁöÁ¤ÇØÁİ´Ï´Ù.
+		String select = (String) params.get("select");
 			if(select.equals("writer")) {
 				select = "m.mem_nickname";
 			}else if(select.equals("title")){
@@ -994,19 +1016,20 @@ public class BoardController {
 			}else {
 				select = "board_content";
 			}
+			//°Ë»öÃ¢¿¡ ÀÔ·ÂÇÑ stringÀ» ¹Ş¾Æ¿É´Ï´Ù.
 			String searchString =(String) params.get("searchString");
 			
 			params.put("search", select);
 			params.put("searchString", searchString); 
 			
-			//ì¡°íšŒìˆ˜ ìˆœ 
+			//Á¶È¸¼ö ¼ø 
 			List<BoardDTO> readlist = boardMapper.readlist();
 			mav.addObject("readlist", readlist);
-			//ëŒ“ê¸€ìˆœ
+			//´ñ±Û¼ø
 			List<BoardDTO> replylist = boardMapper.replylist();
 			mav.addObject("replylist", replylist);
 			
-			//ê²€ìƒ‰ì‹œ í˜ì´ì§€ ë„˜ë²„
+			//°Ë»ö½Ã ÆäÀÌÁö ³Ñ¹ö
 			int pageSize = 10;
 			String pageNum = (String) params.get("pageNum");
 			if (pageNum == null) {
@@ -1044,7 +1067,7 @@ public class BoardController {
 				return mav;
 	}
 	
-	//ìµëª…ê²Œì‹œíŒ ê²€ìƒ‰
+	//ÀÍ¸í°Ô½ÃÆÇ °Ë»ö
 	@RequestMapping("board_anony_find.do")
 	public ModelAndView anonyFind(HttpServletRequest req,@RequestParam String searchString, @RequestParam java.util.Map<String,Object> params) {
 		ModelAndView mav = new ModelAndView("board/list_anony");
@@ -1059,14 +1082,14 @@ public class BoardController {
 		params.put("search", select);
 		params.put("searchString", searchString);
 		
-		//ì¡°íšŒìˆ˜ ìˆœ 
+		//Á¶È¸¼ö ¼ø 
 				List<BoardDTO> readlist = boardMapper.readlist_a();
 				mav.addObject("readlist", readlist);
-				//ëŒ“ê¸€ìˆœ
+				//´ñ±Û¼ø
 				List<BoardDTO> replylist = boardMapper.replylist_a();
 				mav.addObject("replylist", replylist);
 				
-		//ê²€ìƒ‰ì‹œ í˜ì´ì§€ ë„˜ë²„
+		//°Ë»ö½Ã ÆäÀÌÁö ³Ñ¹ö
 		int pageSize = 10;
 		String pageNum = (String) params.get("pageNum");
 		if (pageNum == null) {
