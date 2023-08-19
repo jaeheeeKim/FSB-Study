@@ -270,12 +270,12 @@ public class BusinessProfileController {
 			return mav;
 		}
 		BusinessProfileDTO dto = bpMapper.BPlist(mdto.getMem_num());
-		dto.setBp_num(Integer.parseInt(req.getParameter("bp_num")));
-		dto.setBp_info(req.getParameter("bp_info"));
-		dto.setBp_location(req.getParameter("bp_location"));
-		dto.setBp_d_location(req.getParameter("bp_d_location"));
-		dto.setBp_store_name(req.getParameter("bp_store_name"));
-		dto.setBp_tel(req.getParameter("bp_tel"));
+		dto.setBp_num(Integer.parseInt(req.getParameter("bp_num"))); //매장넘버
+		dto.setBp_info(req.getParameter("bp_info")); // 매장 안내 
+		dto.setBp_location(req.getParameter("bp_location")); // 매장 주소
+		dto.setBp_d_location(req.getParameter("bp_d_location")); // 매장 상세주소
+		dto.setBp_store_name(req.getParameter("bp_store_name"));//매장명 
+		dto.setBp_tel(req.getParameter("bp_tel"));//매장 번호
 		
 		
 		mav.addObject("num", mdto.getMem_num());
@@ -322,13 +322,12 @@ public class BusinessProfileController {
 		dto.setMem_num(Integer.parseInt(params.get("mem_num")));
 
 		int res;
-		// 만료일 지정하지 않음을 선택한 경우
+		// 만료일 지정하지 않음을 선택한 경우 ( view에서 check박스 체크 시 )
 		if (params.get("bc_duedate2") != null) {
 			res = bpMapper.insertBcoupon2(dto);
 		} else { // 만료일을 지정하는 경우
 			String date = dto.getBc_duedate().substring(2);
 			date = date.replace('-', '/');
-			//tem.out.println(date);
 			dto.setBc_duedate(date);
 			res = bpMapper.insertBcoupon1(dto);
 		}
@@ -598,7 +597,7 @@ public class BusinessProfileController {
 		return mav;		
 	}
 
-	//매장 리뷰 등록
+	//매장 리뷰 등록 폼 불러오기
 	@RequestMapping(value="/bp_insertReview.do", method=RequestMethod.GET)
 	public ModelAndView insertBReview(HttpServletRequest req,@RequestParam int bp_num) {
 		ModelAndView mav= new ModelAndView("Bfeed/b_insertReview");
@@ -614,7 +613,7 @@ public class BusinessProfileController {
 		mav.addObject("bp_num",bp_num);
 		return mav;
 	}
-	//매장 리뷰 등록 ok
+	//매장 리뷰 등록 처리
 	@RequestMapping(value="/bp_insertReview.do", method=RequestMethod.POST)
 	public ModelAndView insertBReviewOK(HttpServletRequest req,@RequestParam Map<String, Object> map,@ModelAttribute BusinessReviewDTO dto,  BindingResult result) {
 		ModelAndView mav= new ModelAndView("message");
