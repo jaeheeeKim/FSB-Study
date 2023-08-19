@@ -720,7 +720,7 @@ public class BusinessProfileController {
 	         File file3 = new File(upPath, bpr_img3);
 	         File file4 = new File(upPath, bpr_img4);
 
-	         if (file1.exists()) { //이미지가 한개일때, 두개일 때 ,,,
+	         if (file1.exists()) {
 	            file1.delete();
 	            mav.addObject("msg", "상품 리뷰 이미지, 글 삭제 성공");
 	         } else if (file1.exists() && file2.exists()) {
