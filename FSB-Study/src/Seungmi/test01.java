@@ -3,13 +3,31 @@ public class test01 {
 	public static void main(String[] args) {
 		int score = 93;
 		
-		if(score >= 90) { // score °¡ 90 ÀÌ»óÀÎ °æ¿ì, ¾Æ·¡ÀÇ ½ÇÇà¹® 2°³¸¦ ½ÇÇà
-			System.out.println("Á¡¼ö°¡ 90º¸´Ù Å®´Ï´Ù.");
-			System.out.println("µî±ŞÀº A ÀÔ´Ï´Ù.");
+		// if ì ˆ 2ê°œë¡œ í‘œí˜„í•˜ê¸°
+		if(score >= 90) { // score ê°€ 90 ì´ìƒì¸ ê²½ìš°, ì•„ë˜ì˜ ì‹¤í–‰ë¬¸ 2ê°œë¥¼ ì‹¤í–‰
+			System.out.println("ì ìˆ˜ê°€ 90ë³´ë‹¤ í½ë‹ˆë‹¤.");
+			System.out.println("ë“±ê¸‰ì€ A ì…ë‹ˆë‹¤.");
 		}
 		
 		if(score < 90)
-			System.out.println("Á¡¼ö°¡ 90º¸´Ù ÀÛ½À´Ï´Ù."); // score °¡ 90º¸´Ù ÀÛÀº °æ¿ì, ½ÇÇà
-			System.out.println("ÀÌ ½ÇÇà¹®Àº, if¹®°ú °ü°è¾øÀÌ ½ÇÇàµË´Ï´Ù."); 
+			System.out.println("ì ìˆ˜ê°€ 90ë³´ë‹¤ ì‘ìŠµë‹ˆë‹¤."); // score ê°€ 90ë³´ë‹¤ ì‘ì€ ê²½ìš°, ì‹¤í–‰
+			System.out.println("ì´ ì‹¤í–‰ë¬¸ì€, ifë¬¸ê³¼ ê´€ê³„ì—†ì´ ì‹¤í–‰ë©ë‹ˆë‹¤.");
+			
+		// if else ì ˆ ë¡œ í‘œí˜„í•˜ê¸°
+			if(score >= 90) {
+				System.out.println("ì ìˆ˜ê°€ 90ë³´ë‹¤ í½ë‹ˆë‹¤.");
+				System.out.println("ë“±ê¸‰ì€ A ì…ë‹ˆë‹¤.");
+			}else {
+				System.out.println("ì ìˆ˜ê°€ 90ë³´ë‹¤ ì‘ìŠµë‹ˆë‹¤.");
+				System.out.println("ë“±ê¸‰ì€ B ì…ë‹ˆë‹¤.");
+			}
+		// ì¡°ê±´ë¬¸ì´ ì—¬ëŸ¬ê°œì¸ if (else if)
+		if(score >=95) {
+			System.out.println("ì ìˆ˜ê°€ 95ë³´ë‹¤ í½ë‹ˆë‹¤.");
+		}else if(score >=90) {
+			System.out.println("ì ìˆ˜ê°€ 90ë³´ë‹¤ í½ë‹ˆë‹¤.");
+		}else {
+			System.out.println("ì ìˆ˜ê°€ 90ë³´ë‹¤ ì‘ìŠµë‹ˆë‹¤.");
+		}
 	}
 }
